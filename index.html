@@ -84,6 +84,7 @@ svg.leaflet-zoom-animated{will-change:transform}
 .s-lipe { --c: var(--lipe); }
 .s-lanta { --c: var(--lanta); }
 .s-fly, .s-home, .s-plane { --c: var(--flight); }
+.s-hotel { --c: var(--ink); }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--hdr) + 12px); scroll-behavior: smooth; }
@@ -152,6 +153,9 @@ header > * { min-width: 0; }
 .stays .io span { white-space: nowrap; }
 .stays .io b { color: var(--ink); font-weight: 600; }
 .stays-note { max-width: 72ch; }
+.mapbtn { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 9px 15px; border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--bkk) 60%, transparent); background: color-mix(in srgb, var(--bkk) 16%, var(--surface)); color: var(--ink); font: 700 14.5px/1.2 var(--body); }
+.mapbtn:hover { background: color-mix(in srgb, var(--bkk) 30%, var(--surface)); }
 .stays .ht { display: block; margin-top: 3px; }
 .stays .ht a { color: var(--ink); font-weight: 600; white-space: nowrap; text-decoration-color: color-mix(in srgb, var(--c) 75%, transparent);
   text-decoration-thickness: 2px; text-underline-offset: 3px; }
@@ -208,6 +212,10 @@ header > * { min-width: 0; }
 .mapcap i.van { border-top: 3.5px dotted var(--van); }
 .mapcap i.fl { border-top: 2.5px dashed var(--flight); }
 .mapcap i.n { width: 18px; height: 18px; border: 2.5px solid var(--bkk); border-radius: 50%; background: var(--surface); font: 700 10px/13px var(--body); font-style: normal; text-align: center; color: var(--ink); }
+.mapcap i.ho { width: 16px; height: 16px; border: 2.5px solid var(--ink); border-radius: 50%; background: var(--surface); }
+.mapcap i.ho.ours { background: var(--ink); }
+.mapcap i.pl { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--bkk); }
+.mapcap:not(.hm) .lg.hl, .mapcap.hm .lg:not(.hl) { display: none; }
 .mapcap .attr { flex-basis: 100%; }
 .mapcap .attr a { color: var(--muted); }
 
@@ -221,6 +229,7 @@ header > * { min-width: 0; }
 .leaflet-bar a.leaflet-disabled { color: var(--muted); opacity: .45; }
 path.land { fill: var(--land); fill-opacity: 1; stroke: var(--coast); stroke-opacity: 1; stroke-width: .8; }
 path.land2 { fill: var(--land2); fill-opacity: 1; stroke: var(--coast); stroke-opacity: 1; stroke-width: .6; }
+path.park { fill: color-mix(in srgb, var(--lanta) 30%, var(--land)); fill-opacity: 1; stroke: color-mix(in srgb, var(--lanta) 55%, var(--land)); stroke-opacity: 1; stroke-width: 1; }
 path.river { fill: none; stroke: var(--river); stroke-opacity: 1; stroke-linecap: round; stroke-linejoin: round; }
 path.ln { fill: none; stroke-opacity: 1; stroke-linecap: round; stroke-linejoin: round; transition: opacity .25s ease; }
 path.ln.boat { stroke: var(--c); stroke-width: 3.5; }
@@ -246,6 +255,11 @@ path.ln.hide { opacity: 0; }
 .pm.k-sight .pin { width: 12px; height: 12px; background: var(--c); box-shadow: 0 0 0 2px var(--ring), 0 1px 3px rgba(0, 0, 0, .3); }
 .pm.k-air .pin, .pm.k-pier .pin, .pm.k-stay .pin, .pm.k-food .pin { width: 24px; height: 24px; background: var(--surface); border: 2.5px solid var(--c); box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
 .pm.k-base .pin { width: 18px; height: 18px; background: var(--c); box-shadow: 0 0 0 3px var(--ring), 0 2px 7px rgba(0, 0, 0, .3); }
+.pm.k-hotel .pin { width: 24px; height: 24px; background: var(--surface); border: 2.5px solid var(--c); box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
+.pm.k-hotel .pin svg { fill: var(--c); }
+.pm.k-hotel.ours .pin { background: var(--c); }
+.pm.k-hotel.ours .pin svg { fill: var(--surface); }
+.pm.k-hotel.sel .pin { box-shadow: 0 0 0 3px var(--ring), 0 0 0 5.5px var(--c), 0 2px 8px rgba(0, 0, 0, .3); }
 .pm.on .pin { width: 28px; height: 28px; background: var(--surface); border: 3px solid var(--c); box-shadow: 0 0 0 2px var(--ring), 0 2px 7px rgba(0, 0, 0, .3); }
 .pm.on .pin svg { display: none; }
 .pm.on .pin b { display: block; }
@@ -285,6 +299,11 @@ path.ln.hide { opacity: 0; }
   border-radius: 999px; padding: 6px 10px; font: 600 12.5px/1 var(--body); cursor: pointer; }
 .pincard .x { position: absolute; top: 6px; right: 6px; width: 34px; height: 34px; border: 0; border-radius: 10px; background: transparent; font-size: 22px; line-height: 1; cursor: pointer; }
 .pincard .x:hover { background: var(--surface-2); }
+.pincard .hd { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; font-size: 14px; line-height: 1.4; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.pincard .hd b { color: var(--ink); font-weight: 600; }
+.pincard .src { font-size: 12.5px; color: var(--muted); }
+.pincard .gm { display: inline-block; margin-top: 8px; font: 600 14px/1.2 var(--body); color: var(--ink);
+  text-decoration-color: var(--c); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .backday { position: absolute; z-index: 1001; top: 10px; left: 10px; border: 0; cursor: pointer; padding: 9px 13px; border-radius: 999px;
   background: var(--ink); color: var(--surface); font: 700 13.5px/1 var(--body); box-shadow: var(--shadow-lg); }
 .maphint { position: absolute; inset: 0; z-index: 1100; display: grid; place-items: center; pointer-events: none; background: var(--scrim); color: #fff;
@@ -423,6 +442,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Pathumwan+Princess+Hotel" target="_blank" rel="noopener">Pathumwan Princess</a> (next door to MBK), <a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> (rooftop pool and bar) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Hua+Chang+Heritage+Hotel" target="_blank" rel="noopener">Hua Chang Heritage</a> (boutique, near Jim Thompson House)</span></li>
   </ul>
   <p class="cal-note stays-note">Times are when you get there and when you leave, from the day plans below. Tap a hotel to see it on Google Maps, with photos, reviews and prices. Check-in usually opens at 14:00, so on Phi Phi and Lanta ask to leave your bags. You leave both Bangkok hotels before dawn, so pay the night before.</p>
+  <button type="button" class="mapbtn" data-hotels="1"><span aria-hidden="true">📍</span> Compare Bangkok hotels on the map</button>
   <ul class="facts">
     <li><b>17</b> nights in Thailand</li>
     <li><b>6</b> flights</li>
@@ -491,6 +511,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
         <button type="button" data-view="pp" class="s-pp">Phi Phi</button>
         <button type="button" data-view="lipe" class="s-lipe">Lipe</button>
         <button type="button" data-view="lanta" class="s-lanta">Lanta</button>
+        <button type="button" data-view="hotels" class="s-bkk">Bangkok hotels</button>
       </div>
       <div class="map-shell" id="mapshell">
         <div id="map" role="region" aria-label="Trip map"></div>
@@ -508,6 +529,9 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
         <span class="lg"><i class="van"></i>Van</span>
         <span class="lg"><i class="fl"></i>Flight</span>
         <span class="lg"><i class="n">1</i>Stops of the day</span>
+        <span class="lg hl"><i class="ho ours"></i>Our hotel picks</span>
+        <span class="lg hl"><i class="ho"></i>Hotels from your list</span>
+        <span class="lg hl"><i class="pl"></i>Places in your plan</span>
         <span class="attr">Coastlines <a href="https://gadm.org" target="_blank" rel="noopener">GADM 4.1</a> and <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a>; places and river © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors; drawn with <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>. Boat lines are schematic.</span>
       </div>
     </div>
@@ -633,6 +657,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     <li><a href="https://odessia.com/hotels/thailand/krabi/ko-lanta/srilanta-resort-and-spa" target="_blank" rel="noopener">SriLanta Resort and Spa</a> and <a href="https://www.travelocity.com/Ko-Lanta-Hotels-SriLanta-Resort-And-Spa.h7828915.Hotel-Information" target="_blank" rel="noopener">its address</a></li>
     <li><a href="https://www.visitthailandtoday.com/restaurants/koh-lanta/yawee-restaurant" target="_blank" rel="noopener">Yawee</a> and <a href="https://www.happycow.net/reviews/yawee-koh-lanta-148076" target="_blank" rel="noopener">its HappyCow reviews</a></li>
     <li><a href="https://abuja.thaiembassy.org/en/content/thailand-digital-arrival-card-tdac" target="_blank" rel="noopener">Thai embassy: the TDAC arrival card</a></li>
+    <li><a href="https://tailandieciai.lt/10-bankoko-viesbuciu-su-baseinu-ant-stogo-3-dalis/" target="_blank" rel="noopener">Tailandieciai.lt: 10 Bangkok hotels with rooftop pools, part 3</a> (the outlined hotels on the map; positions and stations from OpenStreetMap)</li>
     <li>Hotel picks, checked 16 Nov 2026: <a href="https://www.agoda.com/phi-phi-the-beach-resort/hotel/koh-phi-phi-th.html" target="_blank" rel="noopener">Phi Phi The Beach Resort</a>, <a href="https://www.expedia.com/Ko-Phi-Phi-Hotels-Paradise-Resort-Phi-Phi.h17891121.Hotel-Information" target="_blank" rel="noopener">Paradise Resort Phi Phi</a>, <a href="https://www.thelostpassport.com/koh-lipe-hotels/" target="_blank" rel="noopener">The Lost Passport: Lipe hotels</a>, <a href="https://www.agoda.com/idyllic-concept-resort/hotel/koh-lipe-th.html" target="_blank" rel="noopener">Idyllic Concept</a>, <a href="https://www.booking.com/hotel/th/akira-lipe-resort.html" target="_blank" rel="noopener">Akira Lipe</a>, <a href="https://www.dusit.com/dusitthani-bangkok/main/" target="_blank" rel="noopener">Dusit Thani Bangkok</a>, <a href="https://www.expedia.com.au/Bangkok-Hotels-Le-Meridien-Bangkok.h1969078.Hotel-Information" target="_blank" rel="noopener">Le Méridien Bangkok</a>, <a href="https://uk.trip.com/hotels/bangkok-hotel-detail-121671207/nishitetsu-hotel-croom-bangkok-silom/review.html" target="_blank" rel="noopener">Hotel Croom Silom</a> and <a href="https://www.hotels.com/ho258126" target="_blank" rel="noopener">Siam@Siam</a></li>
   </ul>
 </section>
@@ -952,7 +977,43 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     pier: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 15l1.55 1.55c-.96 1.69-3.33 3.04-5.55 3.37V11h3V9h-3V7.82C14.16 7.4 15 6.3 15 5c0-1.65-1.35-3-3-3S9 3.35 9 5c0 1.3.84 2.4 2 2.82V9H8v2h3v8.92c-2.22-.33-4.59-1.68-5.55-3.37L7 15l-4-3v3c0 3.88 4.92 7 9 7s9-3.12 9-7v-3l-4 3zM12 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/></svg>',
     stay: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>',
     food: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+    hotel: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 11V3H7v4H3v14h8v-4h2v4h8V11h-4zM7 19H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm0-4H9V5h2v2zm4 8h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/></svg>',
   };
+
+  // The "Bangkok hotels" map view: the hotels from the user's Tailandieciai.lt rooftop-pool list (part 3) and the picks in the
+  // hotel list above (pick). Positions from OpenStreetMap, checked 16 Nov 2026; Croom and Jasmine Grande aren't mapped, so theirs are approximate.
+  const HOTELS = [
+    { id: "h-dusit", n: "Dusit Thani", ll: [13.7282, 100.53826], pick: 1, q: "Dusit Thani Bangkok", d: "Our pick for the first stay, the treat: rebuilt in 2024, facing Lumphini Park and linked to MRT Si Lom and BTS Sala Daeng." },
+    { id: "h-meridien", n: "Le Méridien", ll: [13.73002, 100.53036], pick: 1, q: "Le Meridien Bangkok Surawong", d: "Our pick for the first stay: 5 min from Sala Daeng BTS, by Patpong night market. Rated 9.2." },
+    { id: "h-croom", n: "Hotel Croom Silom", sn: "Croom", ll: [13.7283, 100.5332], pick: 1, q: "Nishitetsu Hotel Croom Bangkok Silom", d: "Our cheaper pick for the first stay: new, 3 min from Sala Daeng BTS, rated about 9.1. The pin is approximate." },
+    { id: "h-pathumwan", n: "Pathumwan Princess", sn: "Pathumwan", ll: [13.74346, 100.5297], pick: 1, q: "Pathumwan Princess Hotel", d: "Our pick for the last two nights: attached to MBK, a 5-min walk from Jim Thompson House." },
+    { id: "h-huachang", n: "Hua Chang Heritage", sn: "Hua Chang", ll: [13.7488, 100.53071], pick: 1, q: "Hua Chang Heritage Hotel", d: "Our pick for the last two nights: boutique, near Jim Thompson House and BTS Ratchathewi." },
+    { id: "h-siamsiam", n: "Siam@Siam", ll: [13.74723, 100.52691], pick: 1, list: 1, q: "Siam@Siam Design Hotel Bangkok", d: "Colourful, good-value design hotel with a rooftop pool and bar, by National Stadium BTS. Also one of our picks for the last two nights." },
+    { id: "h-137", n: "137 Pillars Suites", sn: "137 Pillars", ll: [13.7376, 100.57236], list: 1, q: "137 Pillars Suites Bangkok", d: "Luxury suites off Sukhumvit 39, with two infinity pools: one on the 27th floor for every guest, and one on the roof for suite guests." },
+    { id: "h-muu", n: "MUU Bangkok", sn: "MUU", ll: [13.73069, 100.58168], list: 1, q: "MUU Bangkok Hotel", d: "Stylish hotel in trendy Thong Lo, among cafés and shops. It used to be Akyra Thonglor." },
+    { id: "h-sindhorn", n: "Sindhorn Midtown", sn: "Sindhorn", ll: [13.74153, 100.54279], list: 1, q: "Sindhorn Midtown Hotel Bangkok", d: "One of Bangkok's newest hotels, about 1 km from Lumphini Park. Guests love the pool and its city views." },
+    { id: "h-jasmine", n: "Jasmine Grande Residence", sn: "Jasmine Grande", ll: [13.7129, 100.5843], list: 1, q: "Jasmine Grande Residence Bangkok", d: "Family hotel with water slides on Rama IV, by Sukhumvit 42 and away from the centre. Free shuttle to BTS Phra Khanong. The pin is approximate." },
+    { id: "h-adlib", n: "Ad Lib", ll: [13.7453, 100.55224], list: 1, q: "Ad Lib Hotel Bangkok", d: "Rooftop pool in jungle-like greenery and Scandinavian-style rooms, near BTS Phloen Chit." },
+    { id: "h-novotel", n: "Novotel Sukhumvit 4", sn: "Novotel", ll: [13.7394, 100.55335], list: 1, q: "Novotel Bangkok Sukhumvit 4", d: "Fairly new, modern and good value, with big views from the 25th-floor pool." },
+    { id: "h-sivatel", n: "Sivatel", ll: [13.74471, 100.54808], list: 1, q: "Sivatel Bangkok Hotel", d: "Large rooms with city views, a spa and a panorama pool, on Wireless Road." },
+    { id: "h-banyan", n: "Banyan Tree", ll: [13.72359, 100.53979], list: 1, q: "Banyan Tree Bangkok", d: "Luxury in Sathorn, near Lumphini Park. The roof has the pool and Vertigo, the rooftop bar on your Sat 19 list." },
+    { id: "h-oakwood", n: "Oakwood Suites", sn: "Oakwood", ll: [13.72871, 100.56841], list: 1, q: "Oakwood Suites Bangkok", d: "Newish and very well reviewed, near BTS Phrom Phong. Every room has a kitchen." },
+  ];
+  HOTELS.forEach((h) => PINS.push({ ...h, k: "hotel", s: "hotel", z: 99 }));
+  // BTS and MRT stations near the hotels, and Lumphini Park's outline (simplified), from OpenStreetMap
+  const STATIONS = [
+    ["Ratchathewi", "BTS", 13.75186, 100.53155], ["Siam", "BTS", 13.74562, 100.53422], ["Chit Lom", "BTS", 13.7441, 100.54307],
+    ["Phloen Chit", "BTS", 13.74307, 100.54898], ["Nana", "BTS", 13.74054, 100.55543], ["Asok", "BTS", 13.73704, 100.56036],
+    ["Phrom Phong", "BTS", 13.73043, 100.56971], ["Thong Lo", "BTS", 13.72423, 100.57851], ["Ekkamai", "BTS", 13.71954, 100.58511],
+    ["Phra Khanong", "BTS", 13.71517, 100.59124], ["National Stadium", "BTS", 13.74651, 100.52909], ["Ratchadamri", "BTS", 13.73947, 100.53945],
+    ["Sala Daeng", "BTS", 13.72857, 100.53434], ["Chong Nonsi", "BTS", 13.7238, 100.52933], ["Saint Louis", "BTS", 13.72082, 100.52669],
+    ["Surasak", "BTS", 13.71927, 100.52146], ["Saphan Taksin", "BTS", 13.71878, 100.51421], ["Phaya Thai", "BTS", 13.75696, 100.53382],
+    ["Si Lom", "MRT", 13.7292, 100.53707], ["Lumphini", "MRT", 13.72561, 100.54572], ["Khlong Toei", "MRT", 13.72213, 100.55437],
+    ["Queen Sirikit Centre", "MRT", 13.72267, 100.55991], ["Sukhumvit", "MRT", 13.73747, 100.5615], ["Phetchaburi", "MRT", 13.74919, 100.56342],
+    ["Sam Yan", "MRT", 13.73206, 100.53012], ["Hua Lamphong", "MRT", 13.73757, 100.51713], ["Wat Mangkon", "MRT", 13.74221, 100.50991],
+  ];
+  const PARK = [[13.73398, 100.54563], [13.73423, 100.53882], [13.73116, 100.53764], [13.7303, 100.53813], [13.72897, 100.53854], [13.7283, 100.54011],
+    [13.72848, 100.54058], [13.72838, 100.54081], [13.72797, 100.54097], [13.72673, 100.54394], [13.72691, 100.5445]];
 
   const PIN = {}, DAY = {};
   PINS.forEach((p) => { PIN[p.id] = p; p.days = []; });
@@ -1024,10 +1085,10 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   }
 
   /* ---------- map ---------- */
-  let map = null, active = null, selPin = null, quietUntil = 0;
+  let map = null, active = null, selPin = null, quietUntil = 0, hotelMode = false, hotelAt = null;
   const markers = {}, LINES = {};
   const VIEWS = { trip: [[6.30, 98.40], [14.00, 100.95]], bkk: [[13.69, 100.47], [13.88, 100.77]], pp: [[7.665, 98.735], [7.83, 98.815]],
-    lipe: [[6.465, 99.205], [6.575, 99.335]], lanta: [[7.19, 98.86], [7.67, 99.13]] };
+    lipe: [[6.465, 99.205], [6.575, 99.335]], lanta: [[7.19, 98.86], [7.67, 99.13]], hotels: [[13.7125, 100.5255], [13.7495, 100.5860]] };
 
   function decode(s, prec) {
     const pts = [];
@@ -1083,6 +1144,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     L.polygon(LAND.th.map((s) => [decode(s, 1e4)]), { renderer: landR, className: "land", interactive: false, fillRule: "nonzero" }).addTo(map);
     const rv = RIVER.map((s) => decode(s, 1e5));
     const river = L.polyline(rv, { renderer: landR, className: "river", interactive: false, weight: 3 }).addTo(map);
+    L.polygon(PARK, { renderer: landR, className: "park", interactive: false }).addTo(map);
     // the river is about 300 m wide, so draw it to scale once you zoom in
     const sizeRiver = () => {
       const mpp = 156543.03 * Math.cos(13.73 * Math.PI / 180) / Math.pow(2, map.getZoom());
@@ -1116,8 +1178,8 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     }
 
     PINS.forEach((p) => {
-      const html = `<i class="lead"></i><span class="pw"><span class="pin">${ICONS[p.k] || ""}<b></b></span><span class="lbl">${esc(p.n)}${p.sub ? `<small>${esc(p.sub)}</small>` : ""}</span></span>`;
-      const m = L.marker(p.ll, { icon: L.divIcon({ className: `pm k-${p.k} s-${p.s}`, html, iconSize: [0, 0] }), keyboard: true, riseOnHover: true }).addTo(map);
+      const html = `<i class="lead"></i><span class="pw"><span class="pin">${ICONS[p.k] || ""}<b></b></span><span class="lbl">${esc(p.sn || p.n)}${p.sub ? `<small>${esc(p.sub)}</small>` : ""}</span></span>`;
+      const m = L.marker(p.ll, { icon: L.divIcon({ className: `pm k-${p.k} s-${p.s}${p.pick ? " ours" : ""}`, html, iconSize: [0, 0] }), keyboard: true, riseOnHover: true }).addTo(map);
       const el = m.getElement();
       el.setAttribute("role", "button");
       el.setAttribute("aria-label", p.n + (p.sub ? `, ${p.sub}` : ""));
@@ -1199,16 +1261,18 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       el.classList.toggle("sel", sel);
       el.classList.remove(...SIDES, "moved");
       el.querySelector(".pin b").textContent = on ? String(act.indexOf(p.id) + 1) : "";
-      if (!(on || sel || (p.k === "base" ? z < 9.25 : z >= p.z))) { el.classList.add("gone"); continue; }
+      // hotels show only in the "Bangkok hotels" view. There, every Bangkok stop of the plan shows too, and they're all nudged apart
+      const hm = hotelMode && (p.k === "hotel" || (p.s === "bkk" && p.k !== "base"));
+      if ((hotelMode && p.k === "stay") || !(on || sel || hm || (p.k === "base" ? z < 9.25 : z >= p.z))) { el.classList.add("gone"); continue; }
       const pt = map.latLngToContainerPoint(p.ll);
-      items.push({ p, el, m, x0: pt.x, y0: pt.y, x: pt.x, y: pt.y, tier: on || sel ? 1 : p.k === "base" ? 2 : 3,
-        r: on ? 15 : p.k === "base" ? 10 : p.k === "sight" ? 7 : 13 });
+      items.push({ p, el, m, x0: pt.x, y0: pt.y, x: pt.x, y: pt.y, tier: on || sel || hm ? 1 : p.k === "base" ? 2 : 3,
+        r: on ? 15 : p.k === "hotel" ? 12 : p.k === "base" ? 10 : p.k === "sight" ? 7 : 13 });
     }
     const place = (it) => {
       const { p, el, x, y, r } = it, big = p.k === "base", h = big ? 24 : 20, g = 4;
       el.style.setProperty("--off", r + g + "px");
       if (x < 0 || y < 0 || x > size.x || y > size.y) { el.classList.add("l-n"); return; }
-      const w = tw(p.n, big ? "600 15px Fredoka, system-ui, sans-serif" : "600 12px Figtree, system-ui, sans-serif") + (big ? 16 : 12) +
+      const w = tw(p.sn || p.n, big ? "600 15px Fredoka, system-ui, sans-serif" : "600 12px Figtree, system-ui, sans-serif") + (big ? 16 : 12) +
         (p.sub ? tw(p.sub, "500 12px Figtree, system-ui, sans-serif") + 4 : 0);
       const c = { r: [x + r + g, y - h / 2, x + r + g + w, y + h / 2], l: [x - r - g - w, y - h / 2, x - r - g, y + h / 2],
         t: [x - w / 2, y - r - g - h, x + w / 2, y - r - g], b: [x - w / 2, y + r + g, x + w / 2, y + r + g + h] };
@@ -1224,6 +1288,9 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       if (t1.some((o) => over(box(it), box(o)))) it.el.classList.add("gone");
       else { boxes.push(box(it)); shown.push(it); }
     });
+    // in the hotels view the hotels get their names first: your list, then our picks, then the plan's places
+    const rank = (it) => (it.p.k !== "hotel" ? 2 : it.p.list ? 0 : 1);
+    if (hotelMode) shown.sort((a, b) => rank(a) - rank(b));
     shown.forEach(place);
     const later = [];
     items.filter((it) => it.tier === 3).sort((a, b) => (a.p.k === "sight") - (b.p.k === "sight") || a.p.z - b.p.z).forEach((it) => {
@@ -1246,6 +1313,15 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   }
 
   function renderBar() {
+    document.querySelector(".mapcap").classList.toggle("hm", hotelMode);
+    if (hotelMode) {
+      $("daybar").className = "daybar s-hotel";
+      $("barmid").innerHTML = `<span class="d1">Bangkok hotels</span><span class="d2">Tap a hotel for its distances</span>`;
+      $("barmid").setAttribute("aria-label", "Bangkok hotels: tap one for its distances. Go to the day-by-day plan");
+      $("prev").disabled = true;
+      $("next").disabled = false;
+      return;
+    }
     const d = active ? DAY[active] : null;
     $("daybar").className = `daybar s-${d ? d.s : "fly"}`;
     $("barmid").innerHTML = d
@@ -1267,6 +1343,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
 
   function activate(id, opts = {}) {
     active = id || null;
+    hotelMode = false;
     document.querySelectorAll(".day.active").forEach((e) => e.classList.remove("active"));
     if (active) $(active).classList.add("active");
     document.querySelectorAll("#views button.cur").forEach((b) => b.classList.remove("cur"));
@@ -1278,11 +1355,44 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     else flyDay(active && DAY[active]);
   }
 
+  // a hotel's card: the nearest station, and straight-line distances to your Bangkok stops
+  const metres = (a, b) => Math.hypot((a[0] - b[0]) * 111320, (a[1] - b[1]) * 111320 * Math.cos(a[0] * Math.PI / 180));
+  function toPark(ll) {
+    const k = 111320, c = Math.cos(ll[0] * Math.PI / 180), xy = (q) => [(q[1] - ll[1]) * k * c, (q[0] - ll[0]) * k];
+    let inside = false, best = Infinity;
+    for (let i = 0, j = PARK.length - 1; i < PARK.length; j = i++) {
+      const a = xy(PARK[j]), b = xy(PARK[i]), dx = b[0] - a[0], dy = b[1] - a[1];
+      if ((a[1] > 0) !== (b[1] > 0) && a[0] - a[1] * dx / dy > 0) inside = !inside;
+      const t = Math.max(0, Math.min(1, -(a[0] * dx + a[1] * dy) / (dx * dx + dy * dy || 1)));
+      best = Math.min(best, Math.hypot(a[0] + t * dx, a[1] + t * dy));
+    }
+    return inside ? 0 : best;
+  }
+  const far = (m) => (m < 1000 ? `${Math.max(50, Math.round(m / 50) * 50)} m` : `${(m / 1000).toFixed(1)} km`);
+  function hotelCard(p) {
+    const st = STATIONS.map(([n, l, a, b]) => ({ n, l, m: metres(p.ll, [a, b]) })).sort((x, y) => x.m - y.m)[0];
+    const who = p.pick && p.list ? "On your list, and one of our picks" : p.pick ? "Our pick" : "From your list (Tailandieciai.lt)";
+    return `<h5>${esc(p.n)}</h5><p>${esc(p.d)}</p><ul class="hd">
+      <li>🚉 Nearest station: <b>${esc(st.n)} ${st.l}</b>, ${far(st.m)}</li>
+      <li>🦎 Lumphini Park ${far(toPark(p.ll))}</li>
+      <li>🏙️ SkyWalk ${far(metres(p.ll, PIN.skywalk.ll))} · 🛍️ MBK ${far(metres(p.ll, PIN.mbk.ll))}</li></ul>
+      <p class="src">${who} · distances as the crow flies</p>
+      <a class="gm" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(p.q)}" target="_blank" rel="noopener">Open in Google Maps ↗</a>`;
+  }
+
   function showPin(id) {
     const p = PIN[id];
     selPin = id;
     const pc = $("pincard");
     pc.className = `pincard s-${p.s}`;
+    if (p.k === "hotel") {
+      pc.innerHTML = `${hotelCard(p)}<button type="button" class="x" aria-label="Close">×</button>`;
+      pc.hidden = false;
+      layout();
+      const pt = map.latLngToContainerPoint(p.ll), top = pc.getBoundingClientRect().top - $("map").getBoundingClientRect().top;
+      if (pt.y > top - 34) map.panBy([0, pt.y - Math.max(40, top - 56)], { animate: !RM });
+      return;
+    }
     const when = p.days.length ? `<div class="when">${p.days.map((did) => `<button type="button" data-read="${did}">Day ${DAY[did].n} · ${label(DAY[did])} <span aria-hidden="true">→</span></button>`).join("")}</div>` : "";
     pc.innerHTML = `<h5>${esc(p.n)}${p.sub ? ` · ${esc(p.sub)}` : ""}</h5>${p.note ? `<p>${esc(p.note)}</p>` : ""}${when}<button type="button" class="x" aria-label="Close">×</button>`;
     pc.hidden = false;
@@ -1297,6 +1407,20 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     const p = PIN[id];
     if (p.k === "base") go(VIEWS[p.s], 15);
     showPin(id);
+  }
+
+  function showView(v) {
+    activate(null, { fly: false });
+    hotelMode = v === "hotels";
+    hotelAt = null;
+    renderBar();
+    const b = document.querySelector(`#views button[data-view="${v}"]`);
+    if (b) b.classList.add("cur");
+    if (!map) return;
+    // less padding for the hotels, so phones get closer in
+    if (hotelMode) map[RM ? "fitBounds" : "flyToBounds"](VIEWS.hotels, { paddingTopLeft: [14, 20], paddingBottomRight: [14, 86], maxZoom: 15, ...(RM ? { animate: false } : { duration: 0.85 }) });
+    else go(VIEWS[v], 15);
+    layout();
   }
 
   function scrollToDay(id) {
@@ -1329,7 +1453,8 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       return;
     }
     if (t.dataset.read) { activate(t.dataset.read, { fly: false }); scrollToDay(t.dataset.read); return; }
-    if (t.dataset.view) { activate(null, { fly: false }); go(VIEWS[t.dataset.view], 15); t.classList.add("cur"); return; }
+    if (t.dataset.view) { showView(t.dataset.view); return; }
+    if (t.dataset.hotels) { showView("hotels"); quietUntil = performance.now() + 1400; $("mapcol").scrollIntoView({ behavior: SMOOTH, block: "start" }); return; }
     if (t.id === "backday") { t.hidden = true; scrollToDay(t.dataset.day); return; }
     if (t.matches("#pincard .x")) { hidePin(); return; }
     if (t.id === "prev" || t.id === "next") {
@@ -1355,6 +1480,8 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     raf = requestAnimationFrame(() => {
       raf = 0;
       if (performance.now() < quietUntil) return;
+      // the hotels view stays on until you scroll on by half a screen
+      if (hotelMode) { if (hotelAt === null) hotelAt = scrollY; if (Math.abs(scrollY - hotelAt) < innerHeight * 0.5) return; }
       const y = innerHeight * 0.38, box = $("days").getBoundingClientRect();
       if (box.top > y || box.bottom < y) return;
       let pick = DAYS[0].id;
