@@ -196,7 +196,7 @@ header > * { min-width: 0; }
 #map { height: clamp(390px, 66vh, 620px); }
 @media (min-width: 1000px) {
   .plan { grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); grid-template-areas: "days map"; gap: 28px; align-items: start; }
-  .days { grid-area: days; }
+  .plan-left { grid-area: days; }
   .map-col { grid-area: map; position: sticky; top: calc(var(--hdr) + 12px); }
   #map { height: max(500px, calc(100vh - var(--hdr) - 132px)); }
 }
@@ -313,6 +313,7 @@ path.ln.hide { opacity: 0; }
 .pincard .hd { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; font-size: 14px; line-height: 1.4; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .pincard .hd b { color: var(--ink); font-weight: 600; }
 .pincard .src { font-size: 12.5px; color: var(--muted); }
+.pincard .gm + .gm { margin-left: 16px; }
 .pincard .gm { display: inline-block; margin-top: 8px; font: 600 14px/1.2 var(--body); color: var(--ink);
   text-decoration-color: var(--c); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .backday { position: absolute; z-index: 1001; top: 10px; left: 10px; border: 0; cursor: pointer; padding: 9px 13px; border-radius: 999px;
@@ -375,10 +376,34 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
 .fees thead th { border-top: 0; font: 700 12.5px/1.2 var(--body); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
 .fees td:nth-child(2) { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .fees td:nth-child(3) { color: var(--ink-2); }
-.fees.hot td:first-child { min-width: 170px; }
 .fees.hot td:first-child a { color: var(--ink); font-weight: 700; text-decoration-color: color-mix(in srgb, var(--bkk) 75%, transparent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .fees.hot td small { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
 .fees.hot td:nth-child(4) { color: var(--ink-2); }
+.plan-left { min-width: 0; display: grid; gap: 28px; align-content: start; }
+.hot-sec { scroll-margin-top: calc(var(--hdr) + 12px); padding-top: 18px; }
+.hot-sec h2 { font-size: clamp(26px, 3.4vw, 34px); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.hot-sec h2 .e { font-size: .82em; }
+.fees.hot thead { display: none; }
+.fees.hot tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; padding: 12px 14px; border-top: 1px solid var(--line); transition: background .2s; }
+.fees.hot tr.g { padding: 0; }
+.fees.hot th, .fees.hot td { border: 0; padding: 0; }
+.fees.hot tr.g th { padding: 9px 14px; grid-column: 1 / -1; }
+.fees.hot td:nth-child(3), .fees.hot td:nth-child(4) { grid-column: 1 / -1; font-size: 14.5px; }
+.fees.hot td[data-l]::before { content: attr(data-l) ": "; font-weight: 700; color: var(--ink); }
+.fees.hot td[data-l="Pool"]::before { content: "Pool "; }
+.fees.hot tr[id] { cursor: pointer; }
+.fees.hot tr[id]:hover { background: color-mix(in srgb, var(--bkk) 7%, var(--surface)); }
+.fees.hot tr.on { background: color-mix(in srgb, var(--bkk) 16%, var(--surface)); box-shadow: inset 4px 0 0 var(--bkk); }
+.stars { position: relative; display: inline-block; vertical-align: -1px; font-size: 15px; line-height: 1; letter-spacing: 1px; white-space: nowrap; color: color-mix(in srgb, var(--ink) 18%, transparent); }
+.stars::before { content: "★★★★★"; }
+.stars::after { content: "★★★★★"; position: absolute; left: 0; top: 0; width: calc(var(--r) / 5 * 100%); overflow: hidden; color: var(--sun); }
+.rn { font-variant-numeric: tabular-nums; margin: 0 4px 0 3px; }
+.pm.k-hotel.hov .pin { transform: translate(-50%, -50%) scale(1.3); }
+a.ag { display: inline-block; padding: 1px 8px 2px; border-radius: 999px; font: 700 12px/1.5 var(--body); letter-spacing: .02em; text-decoration: none; white-space: nowrap;
+  color: var(--ink); background: color-mix(in srgb, var(--pp) 16%, var(--surface)); border: 1px solid color-mix(in srgb, var(--pp) 45%, transparent); vertical-align: 1px; }
+a.ag::after { content: " ↗"; }
+a.ag:hover { background: color-mix(in srgb, var(--pp) 30%, var(--surface)); }
+.fees.hot td:nth-child(2) { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
 .pinb { border: 0; padding: 2px 3px; margin: -2px 0; background: none; cursor: pointer; font-size: 15px; line-height: 1; border-radius: 8px; }
 .pinb:hover { background: var(--surface-2); }
 .fees tr.g th { font: 600 16px/1.2 var(--display); background: color-mix(in srgb, var(--c, var(--line)) 14%, var(--surface)); }
@@ -389,9 +414,6 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   .fees th, .fees td { border: 0; padding: 0; }
   .fees tr.g th { padding: 9px 14px; grid-column: 1 / -1; }
   .fees td:nth-child(3) { grid-column: 1 / -1; font-size: 14px; }
-  .fees.hot td:nth-child(4) { grid-column: 1 / -1; font-size: 14px; }
-  .fees.hot td[data-l]::before { content: attr(data-l) ": "; font-weight: 700; color: var(--ink); }
-  .fees.hot tr:not(.g) { gap: 4px 12px; }
 }
 .tips { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin-top: 20px; }
 .tipc { padding: 16px 18px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
@@ -447,19 +469,19 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   <ul class="stays" aria-labelledby="stays-h">
     <li class="s-bkk"><span class="pl">Bangkok</span> · Silom / Sathorn · 3&nbsp;nights
       <span class="io"><span>Check in <b>Thu 3 Dec</b>, about 19:00</span><span>Check out <b>Sun 6 Dec</b>, 05:15</span></span>
-      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Dusit+Thani+Bangkok" target="_blank" rel="noopener">Dusit Thani</a> (the treat: facing Lumphini Park, linked to the MRT and BTS), <a href="https://www.google.com/maps/search/?api=1&amp;query=Le+Meridien+Bangkok+Surawong" target="_blank" rel="noopener">Le Méridien</a> (5 min from Sala Daeng BTS) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Nishitetsu+Hotel+Croom+Bangkok+Silom" target="_blank" rel="noopener">Hotel Croom Silom</a> (cheaper, 3 min from Sala Daeng BTS)</span></li>
+      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Dusit+Thani+Bangkok" target="_blank" rel="noopener">Dusit Thani</a> <a class="ag" href="https://www.agoda.com/dusit-thani-bangkok_2/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a> (the treat: facing Lumphini Park, linked to the MRT and BTS), <a href="https://www.google.com/maps/search/?api=1&amp;query=Le+Meridien+Bangkok+Surawong" target="_blank" rel="noopener">Le Méridien</a> <a class="ag" href="https://www.agoda.com/le-meridien-bangkok_19/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a> (5 min from Sala Daeng BTS) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Nishitetsu+Hotel+Croom+Bangkok+Silom" target="_blank" rel="noopener">Hotel Croom Silom</a> <a class="ag" href="https://www.agoda.com/nishitetsu-hotel-croom-bangkok-silom/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a> (cheaper, 3 min from Sala Daeng BTS)</span></li>
     <li class="s-pp"><span class="pl">Koh Phi Phi</span> · Long Beach · 3&nbsp;nights
       <span class="io"><span>Check in <b>Sun 6 Dec</b>, about 13:00</span><span>Check out <b>Wed 9 Dec</b>, 08:30</span></span>
-      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Phi+Phi+The+Beach+Resort+Long+Beach" target="_blank" rel="noopener">Phi Phi The Beach Resort</a> (pools and sea views, on a steep hillside) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Paradise+Resort+Phi+Phi+Long+Beach" target="_blank" rel="noopener">Paradise Resort Phi Phi</a> (simpler, by the beach)</span></li>
+      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Phi+Phi+The+Beach+Resort+Long+Beach" target="_blank" rel="noopener">Phi Phi The Beach Resort</a> <a class="ag" href="https://www.agoda.com/phi-phi-the-beach-resort/hotel/koh-phi-phi-th.html" target="_blank" rel="noopener">Agoda</a> (pools and sea views, on a steep hillside) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Paradise+Resort+Phi+Phi+Long+Beach" target="_blank" rel="noopener">Paradise Resort Phi Phi</a> <a class="ag" href="https://www.agoda.com/paradise-resort-phi-phi/hotel/koh-phi-phi-th.html" target="_blank" rel="noopener">Agoda</a> (simpler, by the beach)</span></li>
     <li class="s-lipe"><span class="pl">Koh Lipe</span> · Sunrise, Pattaya or Sunset Beach · 5&nbsp;nights
       <span class="io"><span>Check in <b>Wed 9 Dec</b>, about 15:00</span><span>Check out <b>Mon 14 Dec</b>, 08:30</span></span>
-      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Castaway+Resort+Koh+Lipe" target="_blank" rel="noopener">Castaway Resort</a> (bungalows with hammocks on Sunrise Beach), <a href="https://www.google.com/maps/search/?api=1&amp;query=Idyllic+Concept+Resort+Koh+Lipe" target="_blank" rel="noopener">Idyllic Concept Resort</a> (modern, at the quiet end of Sunrise Beach) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Akira+Lipe+Resort" target="_blank" rel="noopener">Akira Lipe Resort</a> (Pattaya Beach, three pools)</span></li>
+      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Castaway+Resort+Koh+Lipe" target="_blank" rel="noopener">Castaway Resort</a> <a class="ag" href="https://www.agoda.com/castaway-resort-koh-lipe/hotel/koh-lipe-th.html" target="_blank" rel="noopener">Agoda</a> (bungalows with hammocks on Sunrise Beach), <a href="https://www.google.com/maps/search/?api=1&amp;query=Idyllic+Concept+Resort+Koh+Lipe" target="_blank" rel="noopener">Idyllic Concept Resort</a> <a class="ag" href="https://www.agoda.com/idyllic-concept-resort/hotel/koh-lipe-th.html" target="_blank" rel="noopener">Agoda</a> (modern, at the quiet end of Sunrise Beach) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Akira+Lipe+Resort" target="_blank" rel="noopener">Akira Lipe Resort</a> <a class="ag" href="https://www.agoda.com/akira-lipe-resort/hotel/koh-lipe-th.html" target="_blank" rel="noopener">Agoda</a> (Pattaya Beach, three pools)</span></li>
     <li class="s-lanta"><span class="pl">Koh Lanta</span> · Klong Nin · 4&nbsp;nights
       <span class="io"><span>Check in <b>Mon 14 Dec</b>, about 13:00</span><span>Check out <b>Fri 18 Dec</b>, 09:45</span></span>
-      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=SriLanta+Resort+and+Spa+Koh+Lanta" target="_blank" rel="noopener">SriLanta Resort and Spa</a> (your pick)</span></li>
+      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=SriLanta+Resort+and+Spa+Koh+Lanta" target="_blank" rel="noopener">SriLanta Resort and Spa</a> <a class="ag" href="https://www.agoda.com/srilanta-resort/hotel/koh-lanta-th.html" target="_blank" rel="noopener">Agoda</a> (your pick)</span></li>
     <li class="s-bkk2"><span class="pl">Bangkok</span> · Siam / Ratchathewi · 2&nbsp;nights
       <span class="io"><span>Check in <b>Fri 18 Dec</b>, about 18:00</span><span>Check out <b>Sun 20 Dec</b>, 04:45</span></span>
-      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Pathumwan+Princess+Hotel" target="_blank" rel="noopener">Pathumwan Princess</a> (next door to MBK), <a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> (rooftop bar, pool with a view) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Hua+Chang+Heritage+Hotel" target="_blank" rel="noopener">Hua Chang Heritage</a> (boutique, near Jim Thompson House)</span></li>
+      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Pathumwan+Princess+Hotel" target="_blank" rel="noopener">Pathumwan Princess</a> <a class="ag" href="https://www.agoda.com/pathumwan-princess-hotel/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a> (next door to MBK), <a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> <a class="ag" href="https://www.agoda.com/siam-siam-design-hotel-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a> (rooftop bar, pool with a view) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Hua+Chang+Heritage+Hotel" target="_blank" rel="noopener">Hua Chang Heritage</a> <a class="ag" href="https://www.agoda.com/hua-chang-heritage-hotel/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a> (boutique, near Jim Thompson House)</span></li>
   </ul>
   <p class="cal-note stays-note">Times are when you get there and when you leave, from the day plans below. Tap a hotel to see it on Google Maps, with photos, reviews and prices. Check-in usually opens at 14:00, so on Phi Phi and Lanta ask to leave your bags. You leave both Bangkok hotels before dawn, so pay the night before.</p>
   <div class="hbtns"><button type="button" class="mapbtn" data-hotels="1"><span aria-hidden="true">📍</span> Bangkok hotels on the map</button><a class="mapbtn" href="#hotels"><span aria-hidden="true">🏨</span> Your hotel list, compared</a></div>
@@ -555,7 +577,33 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
         <span class="attr"><span class="attr-c">Coastlines <a href="https://gadm.org" target="_blank" rel="noopener">GADM 4.1</a> and <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a>; places and river © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span><span class="attr-s">Street map <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://openmaptiles.org" target="_blank" rel="noopener">OpenMapTiles</a>, data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span>; drawn with <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a><span class="attr-s"> and <a href="https://maplibre.org" target="_blank" rel="noopener">MapLibre</a></span>. Boat lines are schematic.</span>
       </div>
     </div>
-    <div class="days" id="days"></div>
+    <div class="plan-left">
+      <div class="days" id="days"></div>
+      <section class="hot-sec" id="hotels" aria-labelledby="hotels-h">
+        <h2 id="hotels-h"><span class="e" aria-hidden="true">🏨</span> Bangkok hotels from your list</h2>
+        <p class="sub">The 10 rooftop-pool hotels from your Tailandieciai.lt list, the handiest for your plan first. Prices are per night for the room, so for both of you, as booking sites showed them on 16 Nov 2026. Early December is high season, so expect the top of each range, and check whether breakfast is included. Pool stars are our take from guest reviews and photos: the view, size, sunbeds and crowds. Tap a hotel's 📍 to see it on the map, or Agoda to check your dates.</p>
+        <div class="tbl">
+          <table class="fees hot">
+            <thead><tr><th scope="col">Hotel</th><th scope="col">A night</th><th scope="col">The pool</th><th scope="col">Keep in mind</th></tr></thead>
+            <tbody>
+              <tr class="g s-bkk"><th colspan="4" scope="colgroup">Handy for your plan</th></tr>
+              <tr id="ht-siamsiam"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> <button type="button" class="pinb" data-hotel="h-siamsiam" aria-label="Show Siam@Siam on the map">📍</button><small>Siam · for your last 2 nights</small></td><td><b>€70–130</b><a class="ag" href="https://www.agoda.com/siam-siam-design-hotel-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:3" role="img" aria-label="3 out of 5"></span><b class="rn">3</b> Infinity pool on the 11th floor, facing the sunset. It isn't on the roof and reviews are mixed; the big view is from the 25th-floor rooftop bar.</td><td data-l="Keep in mind">Best value, and the best spot for your last 2 nights: 250&nbsp;m to BTS National Stadium, 450&nbsp;m to MBK. Also one of our picks.</td></tr>
+              <tr id="ht-banyan"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Banyan+Tree+Bangkok" target="_blank" rel="noopener">Banyan Tree</a> <button type="button" class="pinb" data-hotel="h-banyan" aria-label="Show Banyan Tree on the map">📍</button><small>Sathorn · for your first stay</small></td><td><b>€160–300</b><a class="ag" href="https://www.agoda.com/banyan-tree-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:2.5" role="img" aria-label="2.5 out of 5"></span><b class="rn">2.5</b> On the 21st floor, small, and it can get crowded. The roof is Vertigo, an open-air bar and grill on the 61st floor.</td><td data-l="Keep in mind">Vertigo is on your Sat 19 list. 500&nbsp;m to Lumphini Park and 1.3&nbsp;km to the SkyWalk, but 700&nbsp;m to the nearest MRT.</td></tr>
+              <tr id="ht-sindhorn"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Sindhorn+Midtown+Hotel+Bangkok" target="_blank" rel="noopener">Sindhorn Midtown</a> <button type="button" class="pinb" data-hotel="h-sindhorn" aria-label="Show Sindhorn Midtown on the map">📍</button><small>Lang Suan · either stay</small></td><td><b>€120–170</b><a class="ag" href="https://www.agoda.com/sindhorn-midtown-hotel-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:4.5" role="img" aria-label="4.5 out of 5"></span><b class="rn">4.5</b> 18th-floor infinity pool with city views, open 07:00–21:00. On the small side.</td><td data-l="Keep in mind">One of the newest (IHG Vignette Collection). 300&nbsp;m to BTS Chit Lom, 850&nbsp;m to Lumphini Park.</td></tr>
+              <tr id="ht-sivatel"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Sivatel+Bangkok+Hotel" target="_blank" rel="noopener">Sivatel</a> <button type="button" class="pinb" data-hotel="h-sivatel" aria-label="Show Sivatel on the map">📍</button><small>Wireless Road · either stay</small></td><td><b>€105–200</b><a class="ag" href="https://www.agoda.com/sivatel-bangkok-hotel/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:4" role="img" aria-label="4 out of 5"></span><b class="rn">4</b> Infinity pool with a pool bar and city views. Guests love it.</td><td data-l="Keep in mind">Big rooms and a spa, rated about 9/10. 200&nbsp;m to BTS Phloen Chit, 300&nbsp;m to Thai Niyom (your Sat 5 lunch).</td></tr>
+              <tr id="ht-novotel"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Novotel+Bangkok+Sukhumvit+4" target="_blank" rel="noopener">Novotel Sukhumvit 4</a> <button type="button" class="pinb" data-hotel="h-novotel" aria-label="Show Novotel Sukhumvit 4 on the map">📍</button><small>Nana · for your first stay</small></td><td><b>€75–130</b><a class="ag" href="https://www.agoda.com/novotel-bangkok-sukhumvit-4_2/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:3.5" role="img" aria-label="3.5 out of 5"></span><b class="rn">3.5</b> Rooftop pool on the 25th floor, with big views and plenty of sunbeds.</td><td data-l="Keep in mind">Good value. It's on Soi Nana, 300&nbsp;m from Nana Plaza's go-go bars, so ask for a high floor. 250&nbsp;m to BTS Nana.</td></tr>
+              <tr id="ht-adlib"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Ad+Lib+Hotel+Bangkok" target="_blank" rel="noopener">Ad Lib</a> <button type="button" class="pinb" data-hotel="h-adlib" aria-label="Show Ad Lib on the map">📍</button><small>Sukhumvit Soi 1 · either stay</small></td><td><b>€90–135</b><a class="ag" href="https://www.agoda.com/ad-lib-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:4.5" role="img" aria-label="4.5 out of 5"></span><b class="rn">4.5</b> Small rooftop saltwater infinity pool among jungle plants, with loungers in the water. Few sunbeds.</td><td data-l="Keep in mind">A calm boutique hotel down a quiet lane. Small rooms, no balconies, and breakfast isn't always included. 450&nbsp;m to BTS Phloen Chit.</td></tr>
+              <tr class="g"><th colspan="4" scope="colgroup">Further out, on Sukhumvit</th></tr>
+              <tr id="ht-137"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=137+Pillars+Suites+Bangkok" target="_blank" rel="noopener">137 Pillars Suites</a> <button type="button" class="pinb" data-hotel="h-137" aria-label="Show 137 Pillars Suites on the map">📍</button><small>Sukhumvit 39</small></td><td><b>€120–320</b><a class="ag" href="https://www.agoda.com/137-pillars-suites-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:4" role="img" aria-label="4 out of 5"></span><b class="rn">4</b> 27th-floor infinity pool for every guest, open until 20:00. The rooftop pool in the photos is only for suite guests.</td><td data-l="Keep in mind">The most luxurious here. 850&nbsp;m to BTS Phrom Phong, but 2.9&nbsp;km to the park and 5&nbsp;km to the SkyWalk.</td></tr>
+              <tr id="ht-oakwood"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Oakwood+Suites+Bangkok" target="_blank" rel="noopener">Oakwood Suites</a> <button type="button" class="pinb" data-hotel="h-oakwood" aria-label="Show Oakwood Suites on the map">📍</button><small>Sukhumvit 24</small></td><td><b>€110–185</b><a class="ag" href="https://www.agoda.com/oakwood-suites-bangkok/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:3" role="img" aria-label="3 out of 5"></span><b class="rn">3</b> Rooftop infinity pool with skyline views.</td><td data-l="Keep in mind">Every room has a kitchen. Don't mix it up with Oakwood Residence Sukhumvit 24, an older hotel on the same street. 250&nbsp;m to BTS Phrom Phong, 2.5&nbsp;km to the park.</td></tr>
+              <tr id="ht-muu"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=MUU+Bangkok+Hotel" target="_blank" rel="noopener">MUU Bangkok</a> <button type="button" class="pinb" data-hotel="h-muu" aria-label="Show MUU Bangkok on the map">📍</button><small>Thong Lo</small></td><td><b>€85–170</b><a class="ag" href="https://www.agoda.com/muu-bangkok-hotel/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:4" role="img" aria-label="4 out of 5"></span><b class="rn">4</b> Rooftop pool with a hot tub. Guests rate it highly.</td><td data-l="Keep in mind">Formerly Akyra Thonglor. A trendy area full of cafés and bars, but 3.9&nbsp;km from the park and 5.8&nbsp;km from the SkyWalk. 800&nbsp;m to BTS Thong Lo.</td></tr>
+              <tr id="ht-jasmine"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Jasmine+Grande+Residence+Bangkok" target="_blank" rel="noopener">Jasmine Grande Residence</a> <button type="button" class="pinb" data-hotel="h-jasmine" aria-label="Show Jasmine Grande Residence on the map">📍</button><small>Rama IV · far out</small></td><td><b>€40–50</b><a class="ag" href="https://www.agoda.com/jasmine-grande-residence/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda</a></td><td data-l="Pool"><span class="stars" style="--r:1.5" role="img" aria-label="1.5 out of 5"></span><b class="rn">1.5</b> Small pool with a kids' water slide. It gets crowded with families.</td><td data-l="Keep in mind">Family apartments, 4.6&nbsp;km from the park and 6&nbsp;km or more from the SkyWalk and MBK. Free shuttle to BTS Phra Khanong. Only 3/5 on Tripadvisor: skip it.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cal-note stays-note">Prices are snapshots from booking and price-comparison sites, converted at about US$1.12 to the euro, so check your own dates. Distances are as the crow flies. The sources are at the bottom of the page.</p>
+      </section>
+    </div>
   </div>
 </section>
 
@@ -598,31 +646,6 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       </ul>
     </div>
   </div>
-</section>
-
-<section class="wrap sec" id="hotels" aria-labelledby="hotels-h">
-  <h2 id="hotels-h"><span class="e" aria-hidden="true">🏨</span> Bangkok hotels from your list</h2>
-  <p class="sub">The 10 rooftop-pool hotels from your Tailandieciai.lt list, the handiest for your plan first. Prices are per night for the room, so for both of you, as booking sites showed them on 16 Nov 2026. Early December is high season, so expect the top of each range, and check whether breakfast is included. Tap 📍 to see a hotel on the map.</p>
-  <div class="tbl">
-    <table class="fees hot">
-      <thead><tr><th scope="col">Hotel</th><th scope="col">A night</th><th scope="col">The pool</th><th scope="col">Keep in mind</th></tr></thead>
-      <tbody>
-        <tr class="g s-bkk"><th colspan="4" scope="colgroup">Handy for your plan</th></tr>
-        <tr id="ht-siamsiam"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> <button type="button" class="pinb" data-hotel="h-siamsiam" aria-label="Show Siam@Siam on the map">📍</button><small>Siam · for your last 2 nights</small></td><td>€70–130</td><td data-l="Pool">Infinity pool on the 11th floor, facing the sunset. It isn't on the roof and reviews are mixed; the big view is from the 25th-floor rooftop bar.</td><td data-l="Keep in mind">Best value, and the best spot for your last 2 nights: 250&nbsp;m to BTS National Stadium, 450&nbsp;m to MBK. Also one of our picks.</td></tr>
-        <tr id="ht-banyan"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Banyan+Tree+Bangkok" target="_blank" rel="noopener">Banyan Tree</a> <button type="button" class="pinb" data-hotel="h-banyan" aria-label="Show Banyan Tree on the map">📍</button><small>Sathorn · for your first stay</small></td><td>€160–300</td><td data-l="Pool">On the 21st floor, small, and it can get crowded. The roof is Vertigo, an open-air bar and grill on the 61st floor.</td><td data-l="Keep in mind">Vertigo is on your Sat 19 list. 500&nbsp;m to Lumphini Park and 1.3&nbsp;km to the SkyWalk, but 700&nbsp;m to the nearest MRT.</td></tr>
-        <tr id="ht-sindhorn"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Sindhorn+Midtown+Hotel+Bangkok" target="_blank" rel="noopener">Sindhorn Midtown</a> <button type="button" class="pinb" data-hotel="h-sindhorn" aria-label="Show Sindhorn Midtown on the map">📍</button><small>Lang Suan · either stay</small></td><td>€120–170</td><td data-l="Pool">18th-floor infinity pool with city views, open 07:00–21:00. On the small side.</td><td data-l="Keep in mind">One of the newest (IHG Vignette Collection). 300&nbsp;m to BTS Chit Lom, 850&nbsp;m to Lumphini Park.</td></tr>
-        <tr id="ht-sivatel"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Sivatel+Bangkok+Hotel" target="_blank" rel="noopener">Sivatel</a> <button type="button" class="pinb" data-hotel="h-sivatel" aria-label="Show Sivatel on the map">📍</button><small>Wireless Road · either stay</small></td><td>€105–200</td><td data-l="Pool">Infinity pool with a pool bar and city views. Guests love it.</td><td data-l="Keep in mind">Big rooms and a spa, rated about 9/10. 200&nbsp;m to BTS Phloen Chit, 300&nbsp;m to Thai Niyom (your Sat 5 lunch).</td></tr>
-        <tr id="ht-novotel"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Novotel+Bangkok+Sukhumvit+4" target="_blank" rel="noopener">Novotel Sukhumvit 4</a> <button type="button" class="pinb" data-hotel="h-novotel" aria-label="Show Novotel Sukhumvit 4 on the map">📍</button><small>Nana · for your first stay</small></td><td>€75–130</td><td data-l="Pool">Rooftop pool on the 25th floor, with big views and plenty of sunbeds.</td><td data-l="Keep in mind">Good value. It's on Soi Nana, 300&nbsp;m from Nana Plaza's go-go bars, so ask for a high floor. 250&nbsp;m to BTS Nana.</td></tr>
-        <tr id="ht-adlib"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Ad+Lib+Hotel+Bangkok" target="_blank" rel="noopener">Ad Lib</a> <button type="button" class="pinb" data-hotel="h-adlib" aria-label="Show Ad Lib on the map">📍</button><small>Sukhumvit Soi 1 · either stay</small></td><td>€90–135</td><td data-l="Pool">Small rooftop saltwater infinity pool among jungle plants, with loungers in the water. Few sunbeds.</td><td data-l="Keep in mind">A calm boutique hotel down a quiet lane. Small rooms, no balconies, and breakfast isn't always included. 450&nbsp;m to BTS Phloen Chit.</td></tr>
-        <tr class="g"><th colspan="4" scope="colgroup">Further out, on Sukhumvit</th></tr>
-        <tr id="ht-137"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=137+Pillars+Suites+Bangkok" target="_blank" rel="noopener">137 Pillars Suites</a> <button type="button" class="pinb" data-hotel="h-137" aria-label="Show 137 Pillars Suites on the map">📍</button><small>Sukhumvit 39</small></td><td>€120–320</td><td data-l="Pool">27th-floor infinity pool for every guest, open until 20:00. The rooftop pool in the photos is only for suite guests.</td><td data-l="Keep in mind">The most luxurious here. 850&nbsp;m to BTS Phrom Phong, but 2.9&nbsp;km to the park and 5&nbsp;km to the SkyWalk.</td></tr>
-        <tr id="ht-oakwood"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Oakwood+Suites+Bangkok" target="_blank" rel="noopener">Oakwood Suites</a> <button type="button" class="pinb" data-hotel="h-oakwood" aria-label="Show Oakwood Suites on the map">📍</button><small>Sukhumvit 24</small></td><td>€110–185</td><td data-l="Pool">Rooftop infinity pool with skyline views.</td><td data-l="Keep in mind">Every room has a kitchen. Don't mix it up with Oakwood Residence Sukhumvit 24, an older hotel on the same street. 250&nbsp;m to BTS Phrom Phong, 2.5&nbsp;km to the park.</td></tr>
-        <tr id="ht-muu"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=MUU+Bangkok+Hotel" target="_blank" rel="noopener">MUU Bangkok</a> <button type="button" class="pinb" data-hotel="h-muu" aria-label="Show MUU Bangkok on the map">📍</button><small>Thong Lo</small></td><td>€85–170</td><td data-l="Pool">Rooftop pool with a hot tub. Guests rate it highly.</td><td data-l="Keep in mind">Formerly Akyra Thonglor. A trendy area full of cafés and bars, but 3.9&nbsp;km from the park and 5.8&nbsp;km from the SkyWalk. 800&nbsp;m to BTS Thong Lo.</td></tr>
-        <tr id="ht-jasmine"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Jasmine+Grande+Residence+Bangkok" target="_blank" rel="noopener">Jasmine Grande Residence</a> <button type="button" class="pinb" data-hotel="h-jasmine" aria-label="Show Jasmine Grande Residence on the map">📍</button><small>Rama IV · far out</small></td><td>€40–50</td><td data-l="Pool">Small pool with a kids' water slide. It gets crowded with families.</td><td data-l="Keep in mind">Family apartments, 4.6&nbsp;km from the park and 6&nbsp;km or more from the SkyWalk and MBK. Free shuttle to BTS Phra Khanong. Only 3/5 on Tripadvisor: skip it.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="cal-note stays-note">Prices are snapshots from booking and price-comparison sites, converted at about US$1.12 to the euro, so check your own dates. Distances are as the crow flies. The sources are at the bottom of the page.</p>
 </section>
 
 <section class="wrap sec" id="fees" aria-labelledby="fees-h">
@@ -1030,21 +1053,21 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   // The "Bangkok hotels" map view: the hotels from the user's Tailandieciai.lt rooftop-pool list (part 3) and the picks in the
   // hotel list above (pick). Positions from OpenStreetMap, checked 16 Nov 2026; Croom and Jasmine Grande aren't mapped, so theirs are approximate.
   const HOTELS = [
-    { id: "h-dusit", n: "Dusit Thani", ll: [13.7282, 100.53826], pick: 1, q: "Dusit Thani Bangkok", d: "Our pick for the first stay, the treat: rebuilt in 2024, facing Lumphini Park and linked to MRT Si Lom and BTS Sala Daeng." },
-    { id: "h-meridien", n: "Le Méridien", ll: [13.73002, 100.53036], pick: 1, q: "Le Meridien Bangkok Surawong", d: "Our pick for the first stay: 5 min from Sala Daeng BTS, by Patpong night market. Rated 9.2." },
-    { id: "h-croom", n: "Hotel Croom Silom", sn: "Croom", ll: [13.7283, 100.5332], pick: 1, q: "Nishitetsu Hotel Croom Bangkok Silom", d: "Our cheaper pick for the first stay: new, 3 min from Sala Daeng BTS, rated about 9.1. The pin is approximate." },
-    { id: "h-pathumwan", n: "Pathumwan Princess", sn: "Pathumwan", ll: [13.74346, 100.5297], pick: 1, q: "Pathumwan Princess Hotel", d: "Our pick for the last two nights: attached to MBK, a 5-min walk from Jim Thompson House." },
-    { id: "h-huachang", n: "Hua Chang Heritage", sn: "Hua Chang", ll: [13.7488, 100.53071], pick: 1, q: "Hua Chang Heritage Hotel", d: "Our pick for the last two nights: boutique, near Jim Thompson House and BTS Ratchathewi." },
-    { id: "h-siamsiam", n: "Siam@Siam", ll: [13.74723, 100.52691], pick: 1, list: 1, q: "Siam@Siam Design Hotel Bangkok", pr: "€70–130", d: "Colourful, good-value design hotel by National Stadium BTS, with an 11th-floor infinity pool and a rooftop bar. Also one of our picks for the last two nights." },
-    { id: "h-137", n: "137 Pillars Suites", sn: "137 Pillars", ll: [13.7376, 100.57236], list: 1, q: "137 Pillars Suites Bangkok", pr: "€120–320", d: "Luxury suites off Sukhumvit 39, with two infinity pools: one on the 27th floor for every guest, and one on the roof for suite guests." },
-    { id: "h-muu", n: "MUU Bangkok", sn: "MUU", ll: [13.73069, 100.58168], list: 1, q: "MUU Bangkok Hotel", pr: "€85–170", d: "Stylish hotel in trendy Thong Lo, among cafés and shops. It used to be Akyra Thonglor." },
-    { id: "h-sindhorn", n: "Sindhorn Midtown", sn: "Sindhorn", ll: [13.74153, 100.54279], list: 1, q: "Sindhorn Midtown Hotel Bangkok", pr: "€120–170", d: "One of Bangkok's newest hotels, about 1 km from Lumphini Park. Guests love its 18th-floor infinity pool and city views." },
-    { id: "h-jasmine", n: "Jasmine Grande Residence", sn: "Jasmine Grande", ll: [13.7129, 100.5843], list: 1, q: "Jasmine Grande Residence Bangkok", pr: "€40–50", d: "Family hotel with water slides on Rama IV, by Sukhumvit 42 and away from the centre. Free shuttle to BTS Phra Khanong. The pin is approximate." },
-    { id: "h-adlib", n: "Ad Lib", ll: [13.7453, 100.55224], list: 1, q: "Ad Lib Hotel Bangkok", pr: "€90–135", d: "Rooftop pool in jungle-like greenery and Scandinavian-style rooms, near BTS Phloen Chit." },
-    { id: "h-novotel", n: "Novotel Sukhumvit 4", sn: "Novotel", ll: [13.7394, 100.55335], list: 1, q: "Novotel Bangkok Sukhumvit 4", pr: "€75–130", d: "Fairly new, modern and good value, with big views from the 25th-floor pool." },
-    { id: "h-sivatel", n: "Sivatel", ll: [13.74471, 100.54808], list: 1, q: "Sivatel Bangkok Hotel", pr: "€105–200", d: "Large rooms with city views, a spa and a panorama pool, on Wireless Road." },
-    { id: "h-banyan", n: "Banyan Tree", ll: [13.72359, 100.53979], list: 1, q: "Banyan Tree Bangkok", pr: "€160–300", d: "Luxury in Sathorn, near Lumphini Park. Vertigo, the rooftop bar on your Sat 19 list, is on its roof; the pool is on the 21st floor, and small." },
-    { id: "h-oakwood", n: "Oakwood Suites", sn: "Oakwood", ll: [13.72871, 100.56841], list: 1, q: "Oakwood Suites Bangkok", pr: "€110–185", d: "Newish and very well reviewed, near BTS Phrom Phong. Every room has a kitchen." },
+    { id: "h-dusit", ag: "dusit-thani-bangkok_2", n: "Dusit Thani", ll: [13.7282, 100.53826], pick: 1, q: "Dusit Thani Bangkok", d: "Our pick for the first stay, the treat: rebuilt in 2024, facing Lumphini Park and linked to MRT Si Lom and BTS Sala Daeng." },
+    { id: "h-meridien", ag: "le-meridien-bangkok_19", n: "Le Méridien", ll: [13.73002, 100.53036], pick: 1, q: "Le Meridien Bangkok Surawong", d: "Our pick for the first stay: 5 min from Sala Daeng BTS, by Patpong night market. Rated 9.2." },
+    { id: "h-croom", ag: "nishitetsu-hotel-croom-bangkok-silom", n: "Hotel Croom Silom", sn: "Croom", ll: [13.7283, 100.5332], pick: 1, q: "Nishitetsu Hotel Croom Bangkok Silom", d: "Our cheaper pick for the first stay: new, 3 min from Sala Daeng BTS, rated about 9.1. The pin is approximate." },
+    { id: "h-pathumwan", ag: "pathumwan-princess-hotel", n: "Pathumwan Princess", sn: "Pathumwan", ll: [13.74346, 100.5297], pick: 1, q: "Pathumwan Princess Hotel", d: "Our pick for the last two nights: attached to MBK, a 5-min walk from Jim Thompson House." },
+    { id: "h-huachang", ag: "hua-chang-heritage-hotel", n: "Hua Chang Heritage", sn: "Hua Chang", ll: [13.7488, 100.53071], pick: 1, q: "Hua Chang Heritage Hotel", d: "Our pick for the last two nights: boutique, near Jim Thompson House and BTS Ratchathewi." },
+    { id: "h-siamsiam", ag: "siam-siam-design-hotel-bangkok", pool: 3, n: "Siam@Siam", ll: [13.74723, 100.52691], pick: 1, list: 1, q: "Siam@Siam Design Hotel Bangkok", pr: "€70–130", d: "Colourful, good-value design hotel by National Stadium BTS, with an 11th-floor infinity pool and a rooftop bar. Also one of our picks for the last two nights." },
+    { id: "h-137", ag: "137-pillars-suites-bangkok", pool: 4, n: "137 Pillars Suites", sn: "137 Pillars", ll: [13.7376, 100.57236], list: 1, q: "137 Pillars Suites Bangkok", pr: "€120–320", d: "Luxury suites off Sukhumvit 39, with two infinity pools: one on the 27th floor for every guest, and one on the roof for suite guests." },
+    { id: "h-muu", ag: "muu-bangkok-hotel", pool: 4, n: "MUU Bangkok", sn: "MUU", ll: [13.73069, 100.58168], list: 1, q: "MUU Bangkok Hotel", pr: "€85–170", d: "Stylish hotel in trendy Thong Lo, among cafés and shops. It used to be Akyra Thonglor." },
+    { id: "h-sindhorn", ag: "sindhorn-midtown-hotel-bangkok", pool: 4.5, n: "Sindhorn Midtown", sn: "Sindhorn", ll: [13.74153, 100.54279], list: 1, q: "Sindhorn Midtown Hotel Bangkok", pr: "€120–170", d: "One of Bangkok's newest hotels, about 1 km from Lumphini Park. Guests love its 18th-floor infinity pool and city views." },
+    { id: "h-jasmine", ag: "jasmine-grande-residence", pool: 1.5, n: "Jasmine Grande Residence", sn: "Jasmine Grande", ll: [13.7129, 100.5843], list: 1, q: "Jasmine Grande Residence Bangkok", pr: "€40–50", d: "Family hotel with water slides on Rama IV, by Sukhumvit 42 and away from the centre. Free shuttle to BTS Phra Khanong. The pin is approximate." },
+    { id: "h-adlib", ag: "ad-lib-bangkok", pool: 4.5, n: "Ad Lib", ll: [13.7453, 100.55224], list: 1, q: "Ad Lib Hotel Bangkok", pr: "€90–135", d: "Rooftop pool in jungle-like greenery and Scandinavian-style rooms, near BTS Phloen Chit." },
+    { id: "h-novotel", ag: "novotel-bangkok-sukhumvit-4_2", pool: 3.5, n: "Novotel Sukhumvit 4", sn: "Novotel", ll: [13.7394, 100.55335], list: 1, q: "Novotel Bangkok Sukhumvit 4", pr: "€75–130", d: "Fairly new, modern and good value, with big views from the 25th-floor pool." },
+    { id: "h-sivatel", ag: "sivatel-bangkok-hotel", pool: 4, n: "Sivatel", ll: [13.74471, 100.54808], list: 1, q: "Sivatel Bangkok Hotel", pr: "€105–200", d: "Large rooms with city views, a spa and a panorama pool, on Wireless Road." },
+    { id: "h-banyan", ag: "banyan-tree-bangkok", pool: 2.5, n: "Banyan Tree", ll: [13.72359, 100.53979], list: 1, q: "Banyan Tree Bangkok", pr: "€160–300", d: "Luxury in Sathorn, near Lumphini Park. Vertigo, the rooftop bar on your Sat 19 list, is on its roof; the pool is on the 21st floor, and small." },
+    { id: "h-oakwood", ag: "oakwood-suites-bangkok", pool: 3, n: "Oakwood Suites", sn: "Oakwood", ll: [13.72871, 100.56841], list: 1, q: "Oakwood Suites Bangkok", pr: "€110–185", d: "Newish and very well reviewed, near BTS Phrom Phong. Every room has a kitchen." },
   ];
   HOTELS.forEach((h) => PINS.push({ ...h, k: "hotel", s: "hotel", z: 99 }));
   // BTS and MRT stations near the hotels, and Lumphini Park's outline (simplified), from OpenStreetMap
@@ -1146,7 +1169,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   }
 
   /* ---------- map ---------- */
-  let map = null, active = null, selPin = null, quietUntil = 0, hotelMode = false, hotelAt = null;
+  let map = null, active = null, selPin = null, quietUntil = 0, hotelMode = false, hotelAt = null, hotelAuto = false;
   const markers = {}, LINES = {};
   const VIEWS = { trip: [[6.30, 98.40], [14.00, 100.95]], bkk: [[13.69, 100.47], [13.88, 100.77]], pp: [[7.665, 98.735], [7.83, 98.815]],
     lipe: [[6.465, 99.205], [6.575, 99.335]], lanta: [[7.19, 98.86], [7.67, 99.13]], hotels: [[13.7125, 100.5255], [13.7495, 100.5860]] };
@@ -1405,6 +1428,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   function activate(id, opts = {}) {
     active = id || null;
     hotelMode = false;
+    hotelAuto = false;
     document.querySelectorAll(".day.active").forEach((e) => e.classList.remove("active"));
     if (active) $(active).classList.add("active");
     document.querySelectorAll("#views button.cur").forEach((b) => b.classList.remove("cur"));
@@ -1435,16 +1459,18 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     const who = p.pick && p.list ? "On your list, and one of our picks" : p.pick ? "Our pick" : "From your list (Tailandieciai.lt)";
     return `<h5>${esc(p.n)}</h5><p>${esc(p.d)}</p><ul class="hd">
       ${p.pr ? `<li>💶 About <b>${p.pr}</b> a night for the room</li>` : ""}
+      ${p.pool ? `<li>🏊 Pool <span class="stars" style="--r:${p.pool}" role="img" aria-label="${p.pool} out of 5"></span> <b>${p.pool}</b></li>` : ""}
       <li>🚉 Nearest station: <b>${esc(st.n)} ${st.l}</b>, ${far(st.m)}</li>
       <li>🦎 Lumphini Park ${far(toPark(p.ll))}</li>
       <li>🏙️ SkyWalk ${far(metres(p.ll, PIN.skywalk.ll))} · 🛍️ MBK ${far(metres(p.ll, PIN.mbk.ll))}</li></ul>
       <p class="src">${who} · distances as the crow flies</p>
-      <a class="gm" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(p.q)}" target="_blank" rel="noopener">Open in Google Maps ↗</a>`;
+      <a class="gm" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(p.q)}" target="_blank" rel="noopener">Open in Google Maps ↗</a>${p.ag ? `<a class="gm" href="https://www.agoda.com/${p.ag}/hotel/bangkok-th.html" target="_blank" rel="noopener">Agoda ↗</a>` : ""}`;
   }
 
   function showPin(id) {
     const p = PIN[id];
     selPin = id;
+    markRow();
     const pc = $("pincard");
     pc.className = `pincard s-${p.s}`;
     if (p.k === "hotel") {
@@ -1462,6 +1488,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   }
   function hidePin(quiet) {
     selPin = null;
+    markRow();
     $("pincard").hidden = true;
     if (!quiet) layout();
   }
@@ -1499,6 +1526,35 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     b.textContent = `↓ Back to ${label(DAY[fromDay])}`;
   }
 
+  // a hotel in the table: beside the map on a big screen, so just show it; on a phone, jump up to the map
+  function hotelFromTable(id) {
+    if (!map) return;
+    if (WIDE.matches) {
+      const was = hotelMode;
+      if (!was) showView("hotels");
+      hotelAuto = true;
+      setTimeout(() => { if (hotelMode) showPin(id); }, was || RM ? 0 : 900);
+      return;
+    }
+    showView("hotels");
+    quietUntil = performance.now() + 1600;
+    $("mapcol").scrollIntoView({ behavior: SMOOTH, block: "start" });
+    const b = $("backday"); b.hidden = false; b.dataset.day = "ht-" + id.slice(2); b.textContent = "↓ Back to the hotel table";
+    setTimeout(() => { if (hotelMode) showPin(id); }, RM ? 0 : 950);
+  }
+  // mark the hotel's row while its card is open
+  function markRow() {
+    document.querySelectorAll("#hotels tr.on").forEach((r) => r.classList.remove("on"));
+    const r = selPin && PIN[selPin].k === "hotel" && $("ht-" + selPin.slice(2));
+    if (r) r.classList.add("on");
+  }
+  document.querySelectorAll("#hotels tr[id]").forEach((r) => {
+    const id = "h-" + r.id.slice(3);
+    r.addEventListener("click", (e) => { if (!e.target.closest("a, button")) hotelFromTable(id); });
+    r.addEventListener("mouseenter", () => { if (hotelMode && markers[id]) markers[id].getElement().classList.add("hov"); });
+    r.addEventListener("mouseleave", () => { if (markers[id]) markers[id].getElement().classList.remove("hov"); });
+  });
+
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button, a[href^='#d']");
     if (!t) return;
@@ -1516,17 +1572,9 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     }
     if (t.dataset.read) { activate(t.dataset.read, { fly: false }); scrollToDay(t.dataset.read); return; }
     if (t.dataset.view) { showView(t.dataset.view); return; }
-    if (t.dataset.hotel) {   // a 📍 in the hotel table
-      const id = t.dataset.hotel;
-      showView("hotels");
-      quietUntil = performance.now() + 1600;
-      $("mapcol").scrollIntoView({ behavior: SMOOTH, block: "start" });
-      if (!WIDE.matches) { const b = $("backday"); b.hidden = false; b.dataset.day = "hotels"; b.textContent = "↓ Back to the hotel table"; }
-      setTimeout(() => { if (map && hotelMode) showPin(id); }, RM ? 0 : 950);
-      return;
-    }
+    if (t.dataset.hotel) { hotelFromTable(t.dataset.hotel); return; }
     if (t.dataset.hotels) { showView("hotels"); quietUntil = performance.now() + 1400; $("mapcol").scrollIntoView({ behavior: SMOOTH, block: "start" }); return; }
-    if (t.id === "backday") { t.hidden = true; scrollToDay(t.dataset.day); return; }
+    if (t.id === "backday") { t.hidden = true; if ($(t.dataset.day)) { quietUntil = performance.now() + 1400; $(t.dataset.day).scrollIntoView({ behavior: SMOOTH, block: "center" }); } return; }
     if (t.matches("#pincard .x")) { hidePin(); return; }
     if (t.id === "prev" || t.id === "next") {
       const j = (active ? DAY[active].n - 1 : -1) + (t.id === "next" ? 1 : -1);
@@ -1552,8 +1600,14 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       raf = 0;
       if (performance.now() < quietUntil) return;
       // the hotels view stays on until you scroll on by half a screen
-      if (hotelMode) { if (hotelAt === null) hotelAt = scrollY; if (Math.abs(scrollY - hotelAt) < innerHeight * 0.5) return; }
-      const y = innerHeight * 0.38, box = $("days").getBoundingClientRect();
+      const y = innerHeight * 0.38, hb = $("hotels").getBoundingClientRect();
+      if (hb.top <= y) {   // the hotel table is beside the map: show the hotels
+        clearTimeout(ptimer); pend = null;
+        if (!hotelMode) { showView("hotels"); hotelAuto = true; }
+        return;
+      }
+      if (hotelMode && !hotelAuto) { if (hotelAt === null) hotelAt = scrollY; if (Math.abs(scrollY - hotelAt) < innerHeight * 0.5) return; }
+      const box = $("days").getBoundingClientRect();
       if (box.top > y || box.bottom < y) return;
       let pick = DAYS[0].id;
       for (const d of DAYS) { if ($(d.id).getBoundingClientRect().top <= y) pick = d.id; else break; }
