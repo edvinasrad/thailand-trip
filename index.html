@@ -140,6 +140,18 @@ header > * { min-width: 0; }
 .cal a.s-home { background: var(--surface); border-top-color: var(--line); }
 .cal a.today { outline: 2.5px solid var(--ink); outline-offset: 1px; }
 .cal-note { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); }
+.stays-h { margin: 30px 0 0; font-size: 22px; display: flex; align-items: center; gap: 8px; }
+.stays { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 14px; max-width: 940px; }
+.stays li { position: relative; padding-left: 28px; font-size: 15px; line-height: 1.45; color: var(--ink-2); }
+.stays li::before { content: ""; position: absolute; left: 1px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--c);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 28%, var(--bg)); }
+.stays li:not(:last-child)::after { content: ""; position: absolute; left: 7px; top: 24px; bottom: -12px; width: 2px; border-radius: 1px;
+  background: color-mix(in srgb, var(--ink) 18%, var(--bg)); }
+.stays .pl { font: 600 17px/1.2 var(--display); color: var(--ink); }
+.stays .io { display: flex; flex-wrap: wrap; gap: 0 18px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.stays .io span { white-space: nowrap; }
+.stays .io b { color: var(--ink); font-weight: 600; }
+.stays-note { max-width: 72ch; }
 .facts { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .facts li { padding: 9px 13px; border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); font-size: 14px; color: var(--ink-2); }
 .facts b { font: 700 18px/1 var(--display); color: var(--ink); margin-right: 4px; }
@@ -389,6 +401,20 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   </ol>
   <nav class="cal" id="cal" aria-label="Every night of the trip"></nav>
   <p class="cal-note">Each square is one night, coloured by where you sleep. Striped means a night on the plane.</p>
+  <h2 class="stays-h" id="stays-h"><span aria-hidden="true">🛏️</span> Hotel dates to book</h2>
+  <ul class="stays" aria-labelledby="stays-h">
+    <li class="s-bkk"><span class="pl">Bangkok</span> · Silom / Sathorn · 3&nbsp;nights
+      <span class="io"><span>Check in <b>Thu 3 Dec</b>, about 19:00</span><span>Check out <b>Sun 6 Dec</b>, 05:15</span></span></li>
+    <li class="s-pp"><span class="pl">Koh Phi Phi</span> · Long Beach · 3&nbsp;nights
+      <span class="io"><span>Check in <b>Sun 6 Dec</b>, about 13:00</span><span>Check out <b>Wed 9 Dec</b>, 08:30</span></span></li>
+    <li class="s-lipe"><span class="pl">Koh Lipe</span> · Sunrise, Pattaya or Sunset Beach · 5&nbsp;nights
+      <span class="io"><span>Check in <b>Wed 9 Dec</b>, about 15:00</span><span>Check out <b>Mon 14 Dec</b>, 08:30</span></span></li>
+    <li class="s-lanta"><span class="pl">Koh Lanta</span> · SriLanta Resort and Spa · 4&nbsp;nights
+      <span class="io"><span>Check in <b>Mon 14 Dec</b>, about 13:00</span><span>Check out <b>Fri 18 Dec</b>, 09:45</span></span></li>
+    <li class="s-bkk2"><span class="pl">Bangkok</span> · Siam / Ratchathewi · 2&nbsp;nights
+      <span class="io"><span>Check in <b>Fri 18 Dec</b>, about 18:00</span><span>Check out <b>Sun 20 Dec</b>, 04:45</span></span></li>
+  </ul>
+  <p class="cal-note stays-note">Times are when you get there and when you leave, from the day plans below. Check-in usually opens at 14:00, so on Phi Phi and Lanta ask to leave your bags. You leave both Bangkok hotels before dawn, so pay the night before.</p>
   <ul class="facts">
     <li><b>17</b> nights in Thailand</li>
     <li><b>6</b> flights</li>
