@@ -155,6 +155,8 @@ header > * { min-width: 0; }
 .stays-note { max-width: 72ch; }
 .mapbtn { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 9px 15px; border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, var(--bkk) 60%, transparent); background: color-mix(in srgb, var(--bkk) 16%, var(--surface)); color: var(--ink); font: 700 14.5px/1.2 var(--body); }
+.hbtns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.hbtns .mapbtn { margin-top: 0; text-decoration: none; }
 .mapbtn:hover { background: color-mix(in srgb, var(--bkk) 30%, var(--surface)); }
 .stays .ht { display: block; margin-top: 3px; }
 .stays .ht a { color: var(--ink); font-weight: 600; white-space: nowrap; text-decoration-color: color-mix(in srgb, var(--c) 75%, transparent);
@@ -241,6 +243,15 @@ path.ln.on { stroke-width: 5; }
 path.ln.flight.on, path.ln.trip.on, path.ln.rboat.on { stroke-width: 4; }
 path.ln.dim { opacity: .3; }
 path.ln.hide { opacity: 0; }
+/* the street map (MapLibre GL inside Leaflet) fades in over the drawn coastlines once it has drawn */
+.leaflet-gl-layer { opacity: 0; transition: opacity .6s ease; }
+.streets .leaflet-gl-layer { opacity: 1; }
+.streets path.land, .streets path.land2, .streets path.river, .streets path.park { display: none; }
+.maplibregl-map { overflow: hidden; position: relative; }
+.maplibregl-canvas { position: absolute; left: 0; top: 0; }
+.maplibregl-canary { background-color: salmon; }
+.mapcap .attr-s, .streets .mapcap .attr-c { display: none; }
+.streets .mapcap .attr-s { display: inline; }
 .maperr { margin: 0; padding: 48px 24px; text-align: center; color: var(--muted); }
 
 /* pins: a 0×0 anchor holding the marker and its name */
@@ -364,6 +375,12 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
 .fees thead th { border-top: 0; font: 700 12.5px/1.2 var(--body); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
 .fees td:nth-child(2) { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .fees td:nth-child(3) { color: var(--ink-2); }
+.fees.hot td:first-child { min-width: 170px; }
+.fees.hot td:first-child a { color: var(--ink); font-weight: 700; text-decoration-color: color-mix(in srgb, var(--bkk) 75%, transparent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.fees.hot td small { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+.fees.hot td:nth-child(4) { color: var(--ink-2); }
+.pinb { border: 0; padding: 2px 3px; margin: -2px 0; background: none; cursor: pointer; font-size: 15px; line-height: 1; border-radius: 8px; }
+.pinb:hover { background: var(--surface-2); }
 .fees tr.g th { font: 600 16px/1.2 var(--display); background: color-mix(in srgb, var(--c, var(--line)) 14%, var(--surface)); }
 @media (max-width: 620px) {
   .fees thead { display: none; }
@@ -372,6 +389,9 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
   .fees th, .fees td { border: 0; padding: 0; }
   .fees tr.g th { padding: 9px 14px; grid-column: 1 / -1; }
   .fees td:nth-child(3) { grid-column: 1 / -1; font-size: 14px; }
+  .fees.hot td:nth-child(4) { grid-column: 1 / -1; font-size: 14px; }
+  .fees.hot td[data-l]::before { content: attr(data-l) ": "; font-weight: 700; color: var(--ink); }
+  .fees.hot tr:not(.g) { gap: 4px 12px; }
 }
 .tips { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin-top: 20px; }
 .tipc { padding: 16px 18px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
@@ -439,10 +459,10 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=SriLanta+Resort+and+Spa+Koh+Lanta" target="_blank" rel="noopener">SriLanta Resort and Spa</a> (your pick)</span></li>
     <li class="s-bkk2"><span class="pl">Bangkok</span> · Siam / Ratchathewi · 2&nbsp;nights
       <span class="io"><span>Check in <b>Fri 18 Dec</b>, about 18:00</span><span>Check out <b>Sun 20 Dec</b>, 04:45</span></span>
-      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Pathumwan+Princess+Hotel" target="_blank" rel="noopener">Pathumwan Princess</a> (next door to MBK), <a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> (rooftop pool and bar) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Hua+Chang+Heritage+Hotel" target="_blank" rel="noopener">Hua Chang Heritage</a> (boutique, near Jim Thompson House)</span></li>
+      <span class="ht"><span aria-hidden="true">🏨</span> <a href="https://www.google.com/maps/search/?api=1&amp;query=Pathumwan+Princess+Hotel" target="_blank" rel="noopener">Pathumwan Princess</a> (next door to MBK), <a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> (rooftop bar, pool with a view) or <a href="https://www.google.com/maps/search/?api=1&amp;query=Hua+Chang+Heritage+Hotel" target="_blank" rel="noopener">Hua Chang Heritage</a> (boutique, near Jim Thompson House)</span></li>
   </ul>
   <p class="cal-note stays-note">Times are when you get there and when you leave, from the day plans below. Tap a hotel to see it on Google Maps, with photos, reviews and prices. Check-in usually opens at 14:00, so on Phi Phi and Lanta ask to leave your bags. You leave both Bangkok hotels before dawn, so pay the night before.</p>
-  <button type="button" class="mapbtn" data-hotels="1"><span aria-hidden="true">📍</span> Compare Bangkok hotels on the map</button>
+  <div class="hbtns"><button type="button" class="mapbtn" data-hotels="1"><span aria-hidden="true">📍</span> Bangkok hotels on the map</button><a class="mapbtn" href="#hotels"><span aria-hidden="true">🏨</span> Your hotel list, compared</a></div>
   <ul class="facts">
     <li><b>17</b> nights in Thailand</li>
     <li><b>6</b> flights</li>
@@ -532,7 +552,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
         <span class="lg hl"><i class="ho ours"></i>Our hotel picks</span>
         <span class="lg hl"><i class="ho"></i>Hotels from your list</span>
         <span class="lg hl"><i class="pl"></i>Places in your plan</span>
-        <span class="attr">Coastlines <a href="https://gadm.org" target="_blank" rel="noopener">GADM 4.1</a> and <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a>; places and river © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors; drawn with <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>. Boat lines are schematic.</span>
+        <span class="attr"><span class="attr-c">Coastlines <a href="https://gadm.org" target="_blank" rel="noopener">GADM 4.1</a> and <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a>; places and river © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span><span class="attr-s">Street map <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://openmaptiles.org" target="_blank" rel="noopener">OpenMapTiles</a>, data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span>; drawn with <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a><span class="attr-s"> and <a href="https://maplibre.org" target="_blank" rel="noopener">MapLibre</a></span>. Boat lines are schematic.</span>
       </div>
     </div>
     <div class="days" id="days"></div>
@@ -578,6 +598,31 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
       </ul>
     </div>
   </div>
+</section>
+
+<section class="wrap sec" id="hotels" aria-labelledby="hotels-h">
+  <h2 id="hotels-h"><span class="e" aria-hidden="true">🏨</span> Bangkok hotels from your list</h2>
+  <p class="sub">The 10 rooftop-pool hotels from your Tailandieciai.lt list, the handiest for your plan first. Prices are per night for the room, so for both of you, as booking sites showed them on 16 Nov 2026. Early December is high season, so expect the top of each range, and check whether breakfast is included. Tap 📍 to see a hotel on the map.</p>
+  <div class="tbl">
+    <table class="fees hot">
+      <thead><tr><th scope="col">Hotel</th><th scope="col">A night</th><th scope="col">The pool</th><th scope="col">Keep in mind</th></tr></thead>
+      <tbody>
+        <tr class="g s-bkk"><th colspan="4" scope="colgroup">Handy for your plan</th></tr>
+        <tr id="ht-siamsiam"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Siam%40Siam+Design+Hotel+Bangkok" target="_blank" rel="noopener">Siam@Siam</a> <button type="button" class="pinb" data-hotel="h-siamsiam" aria-label="Show Siam@Siam on the map">📍</button><small>Siam · for your last 2 nights</small></td><td>€70–130</td><td data-l="Pool">Infinity pool on the 11th floor, facing the sunset. It isn't on the roof and reviews are mixed; the big view is from the 25th-floor rooftop bar.</td><td data-l="Keep in mind">Best value, and the best spot for your last 2 nights: 250&nbsp;m to BTS National Stadium, 450&nbsp;m to MBK. Also one of our picks.</td></tr>
+        <tr id="ht-banyan"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Banyan+Tree+Bangkok" target="_blank" rel="noopener">Banyan Tree</a> <button type="button" class="pinb" data-hotel="h-banyan" aria-label="Show Banyan Tree on the map">📍</button><small>Sathorn · for your first stay</small></td><td>€160–300</td><td data-l="Pool">On the 21st floor, small, and it can get crowded. The roof is Vertigo, an open-air bar and grill on the 61st floor.</td><td data-l="Keep in mind">Vertigo is on your Sat 19 list. 500&nbsp;m to Lumphini Park and 1.3&nbsp;km to the SkyWalk, but 700&nbsp;m to the nearest MRT.</td></tr>
+        <tr id="ht-sindhorn"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Sindhorn+Midtown+Hotel+Bangkok" target="_blank" rel="noopener">Sindhorn Midtown</a> <button type="button" class="pinb" data-hotel="h-sindhorn" aria-label="Show Sindhorn Midtown on the map">📍</button><small>Lang Suan · either stay</small></td><td>€120–170</td><td data-l="Pool">18th-floor infinity pool with city views, open 07:00–21:00. On the small side.</td><td data-l="Keep in mind">One of the newest (IHG Vignette Collection). 300&nbsp;m to BTS Chit Lom, 850&nbsp;m to Lumphini Park.</td></tr>
+        <tr id="ht-sivatel"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Sivatel+Bangkok+Hotel" target="_blank" rel="noopener">Sivatel</a> <button type="button" class="pinb" data-hotel="h-sivatel" aria-label="Show Sivatel on the map">📍</button><small>Wireless Road · either stay</small></td><td>€105–200</td><td data-l="Pool">Infinity pool with a pool bar and city views. Guests love it.</td><td data-l="Keep in mind">Big rooms and a spa, rated about 9/10. 200&nbsp;m to BTS Phloen Chit, 300&nbsp;m to Thai Niyom (your Sat 5 lunch).</td></tr>
+        <tr id="ht-novotel"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Novotel+Bangkok+Sukhumvit+4" target="_blank" rel="noopener">Novotel Sukhumvit 4</a> <button type="button" class="pinb" data-hotel="h-novotel" aria-label="Show Novotel Sukhumvit 4 on the map">📍</button><small>Nana · for your first stay</small></td><td>€75–130</td><td data-l="Pool">Rooftop pool on the 25th floor, with big views and plenty of sunbeds.</td><td data-l="Keep in mind">Good value. It's on Soi Nana, 300&nbsp;m from Nana Plaza's go-go bars, so ask for a high floor. 250&nbsp;m to BTS Nana.</td></tr>
+        <tr id="ht-adlib"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Ad+Lib+Hotel+Bangkok" target="_blank" rel="noopener">Ad Lib</a> <button type="button" class="pinb" data-hotel="h-adlib" aria-label="Show Ad Lib on the map">📍</button><small>Sukhumvit Soi 1 · either stay</small></td><td>€90–135</td><td data-l="Pool">Small rooftop saltwater infinity pool among jungle plants, with loungers in the water. Few sunbeds.</td><td data-l="Keep in mind">A calm boutique hotel down a quiet lane. Small rooms, no balconies, and breakfast isn't always included. 450&nbsp;m to BTS Phloen Chit.</td></tr>
+        <tr class="g"><th colspan="4" scope="colgroup">Further out, on Sukhumvit</th></tr>
+        <tr id="ht-137"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=137+Pillars+Suites+Bangkok" target="_blank" rel="noopener">137 Pillars Suites</a> <button type="button" class="pinb" data-hotel="h-137" aria-label="Show 137 Pillars Suites on the map">📍</button><small>Sukhumvit 39</small></td><td>€120–320</td><td data-l="Pool">27th-floor infinity pool for every guest, open until 20:00. The rooftop pool in the photos is only for suite guests.</td><td data-l="Keep in mind">The most luxurious here. 850&nbsp;m to BTS Phrom Phong, but 2.9&nbsp;km to the park and 5&nbsp;km to the SkyWalk.</td></tr>
+        <tr id="ht-oakwood"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Oakwood+Suites+Bangkok" target="_blank" rel="noopener">Oakwood Suites</a> <button type="button" class="pinb" data-hotel="h-oakwood" aria-label="Show Oakwood Suites on the map">📍</button><small>Sukhumvit 24</small></td><td>€110–185</td><td data-l="Pool">Rooftop infinity pool with skyline views.</td><td data-l="Keep in mind">Every room has a kitchen. Don't mix it up with Oakwood Residence Sukhumvit 24, an older hotel on the same street. 250&nbsp;m to BTS Phrom Phong, 2.5&nbsp;km to the park.</td></tr>
+        <tr id="ht-muu"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=MUU+Bangkok+Hotel" target="_blank" rel="noopener">MUU Bangkok</a> <button type="button" class="pinb" data-hotel="h-muu" aria-label="Show MUU Bangkok on the map">📍</button><small>Thong Lo</small></td><td>€85–170</td><td data-l="Pool">Rooftop pool with a hot tub. Guests rate it highly.</td><td data-l="Keep in mind">Formerly Akyra Thonglor. A trendy area full of cafés and bars, but 3.9&nbsp;km from the park and 5.8&nbsp;km from the SkyWalk. 800&nbsp;m to BTS Thong Lo.</td></tr>
+        <tr id="ht-jasmine"><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Jasmine+Grande+Residence+Bangkok" target="_blank" rel="noopener">Jasmine Grande Residence</a> <button type="button" class="pinb" data-hotel="h-jasmine" aria-label="Show Jasmine Grande Residence on the map">📍</button><small>Rama IV · far out</small></td><td>€40–50</td><td data-l="Pool">Small pool with a kids' water slide. It gets crowded with families.</td><td data-l="Keep in mind">Family apartments, 4.6&nbsp;km from the park and 6&nbsp;km or more from the SkyWalk and MBK. Free shuttle to BTS Phra Khanong. Only 3/5 on Tripadvisor: skip it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="cal-note stays-note">Prices are snapshots from booking and price-comparison sites, converted at about US$1.12 to the euro, so check your own dates. Distances are as the crow flies. The sources are at the bottom of the page.</p>
 </section>
 
 <section class="wrap sec" id="fees" aria-labelledby="fees-h">
@@ -658,6 +703,8 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     <li><a href="https://www.visitthailandtoday.com/restaurants/koh-lanta/yawee-restaurant" target="_blank" rel="noopener">Yawee</a> and <a href="https://www.happycow.net/reviews/yawee-koh-lanta-148076" target="_blank" rel="noopener">its HappyCow reviews</a></li>
     <li><a href="https://abuja.thaiembassy.org/en/content/thailand-digital-arrival-card-tdac" target="_blank" rel="noopener">Thai embassy: the TDAC arrival card</a></li>
     <li><a href="https://tailandieciai.lt/10-bankoko-viesbuciu-su-baseinu-ant-stogo-3-dalis/" target="_blank" rel="noopener">Tailandieciai.lt: 10 Bangkok hotels with rooftop pools, part 3</a> (the outlined hotels on the map; positions and stations from OpenStreetMap)</li>
+    <li>Bangkok hotel table, checked 16 Nov 2026 (prices and pools): 137 Pillars on <a href="https://www.momondo.com/hotels/bangkok/137-Pillars-Suites-Bangkok.mhd878724.ksp" target="_blank" rel="noopener">momondo</a> and <a href="https://www.tripadvisor.com/Hotel_Feature-g293916-d10390906-zft6217-137_Pillars_Suites_Residences_Bangkok.html" target="_blank" rel="noopener">Tripadvisor</a>; MUU on <a href="https://www.kayak.com.au/Bangkok-Hotels-Akyra-Thonglor-Bangkok.344732.ksp" target="_blank" rel="noopener">Kayak</a>; Sindhorn Midtown on <a href="https://compassbangkok.com/sindhorn-midtown-bangkok/" target="_blank" rel="noopener">Compass Bangkok</a> and <a href="https://www.tripadvisor.com/Hotel_Review-g293916-d19602015-Reviews-Sindhorn_Midtown_Hotel_Bangkok_Vignette_Collection_by_IHG-Bangkok.html" target="_blank" rel="noopener">Tripadvisor</a>; Siam@Siam on <a href="https://www.momondo.com/hotels/bangkok/Siam-Siam-Design-Hotel-Bangkok.mhd176459.ksp" target="_blank" rel="noopener">momondo</a> and <a href="https://www.tripexpert.com/bangkok/hotels/siam-at-siam-design-hotel-bangkok/pool" target="_blank" rel="noopener">TripExpert</a>; Jasmine Grande on <a href="https://www.kayak.com.au/Bangkok-Hotels-Jasmine-Grande-Residence.699860.ksp" target="_blank" rel="noopener">Kayak</a> and <a href="https://www.tripadvisor.com/Hotel_Review-g293916-d4108268-Reviews-or10-Jasmine_Grande_Residence-Bangkok.html" target="_blank" rel="noopener">Tripadvisor</a>; Ad Lib on <a href="https://www.kayak.com/Bangkok-Hotels-Ad-Lib.2069358.ksp" target="_blank" rel="noopener">Kayak</a> and <a href="https://www.oyster.com/bangkok/hotels/ad-lib/" target="_blank" rel="noopener">Oyster</a>; Novotel Sukhumvit 4 on <a href="https://www.kayak.com.au/Bangkok-Hotels-Novotel-Bangkok-Sukhumvit-4.4006220.ksp" target="_blank" rel="noopener">Kayak</a> and <a href="https://www.roomertravel.com/article/the-bangkok-hotel-that-actually-lets-you-sleep.a2640" target="_blank" rel="noopener">Roomer</a>; Sivatel on <a href="https://www.momondo.com/hotels/bangkok/Sivatel-Bangkok.mhd377409.ksp" target="_blank" rel="noopener">momondo</a>; Banyan Tree on <a href="https://www.hotels.com/ho128145/banyan-tree-bangkok-bangkok-thailand/" target="_blank" rel="noopener">Hotels.com</a> and <a href="https://compassbangkok.com/banyan-tree-bangkok/" target="_blank" rel="noopener">Compass Bangkok</a>; Oakwood Suites on <a href="https://www.tripadvisor.com/Hotel_Review-g293916-d19596024-Reviews-Oakwood_Suites_Bangkok-Bangkok.html" target="_blank" rel="noopener">Tripadvisor</a> and <a href="https://www.klook.com/en-US/hotels/detail/517043-oakwood-suites-bangkok/" target="_blank" rel="noopener">Klook</a></li>
+    <li>Street map: <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> vector tiles (© OpenMapTiles, data © OpenStreetMap contributors). BTS and MRT stations from OpenStreetMap; the lines are drawn straight from station to station.</li>
     <li>Hotel picks, checked 16 Nov 2026: <a href="https://www.agoda.com/phi-phi-the-beach-resort/hotel/koh-phi-phi-th.html" target="_blank" rel="noopener">Phi Phi The Beach Resort</a>, <a href="https://www.expedia.com/Ko-Phi-Phi-Hotels-Paradise-Resort-Phi-Phi.h17891121.Hotel-Information" target="_blank" rel="noopener">Paradise Resort Phi Phi</a>, <a href="https://www.thelostpassport.com/koh-lipe-hotels/" target="_blank" rel="noopener">The Lost Passport: Lipe hotels</a>, <a href="https://www.agoda.com/idyllic-concept-resort/hotel/koh-lipe-th.html" target="_blank" rel="noopener">Idyllic Concept</a>, <a href="https://www.booking.com/hotel/th/akira-lipe-resort.html" target="_blank" rel="noopener">Akira Lipe</a>, <a href="https://www.dusit.com/dusitthani-bangkok/main/" target="_blank" rel="noopener">Dusit Thani Bangkok</a>, <a href="https://www.expedia.com.au/Bangkok-Hotels-Le-Meridien-Bangkok.h1969078.Hotel-Information" target="_blank" rel="noopener">Le Méridien Bangkok</a>, <a href="https://uk.trip.com/hotels/bangkok-hotel-detail-121671207/nishitetsu-hotel-croom-bangkok-silom/review.html" target="_blank" rel="noopener">Hotel Croom Silom</a> and <a href="https://www.hotels.com/ho258126" target="_blank" rel="noopener">Siam@Siam</a></li>
   </ul>
 </section>
@@ -988,16 +1035,16 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     { id: "h-croom", n: "Hotel Croom Silom", sn: "Croom", ll: [13.7283, 100.5332], pick: 1, q: "Nishitetsu Hotel Croom Bangkok Silom", d: "Our cheaper pick for the first stay: new, 3 min from Sala Daeng BTS, rated about 9.1. The pin is approximate." },
     { id: "h-pathumwan", n: "Pathumwan Princess", sn: "Pathumwan", ll: [13.74346, 100.5297], pick: 1, q: "Pathumwan Princess Hotel", d: "Our pick for the last two nights: attached to MBK, a 5-min walk from Jim Thompson House." },
     { id: "h-huachang", n: "Hua Chang Heritage", sn: "Hua Chang", ll: [13.7488, 100.53071], pick: 1, q: "Hua Chang Heritage Hotel", d: "Our pick for the last two nights: boutique, near Jim Thompson House and BTS Ratchathewi." },
-    { id: "h-siamsiam", n: "Siam@Siam", ll: [13.74723, 100.52691], pick: 1, list: 1, q: "Siam@Siam Design Hotel Bangkok", d: "Colourful, good-value design hotel with a rooftop pool and bar, by National Stadium BTS. Also one of our picks for the last two nights." },
-    { id: "h-137", n: "137 Pillars Suites", sn: "137 Pillars", ll: [13.7376, 100.57236], list: 1, q: "137 Pillars Suites Bangkok", d: "Luxury suites off Sukhumvit 39, with two infinity pools: one on the 27th floor for every guest, and one on the roof for suite guests." },
-    { id: "h-muu", n: "MUU Bangkok", sn: "MUU", ll: [13.73069, 100.58168], list: 1, q: "MUU Bangkok Hotel", d: "Stylish hotel in trendy Thong Lo, among cafés and shops. It used to be Akyra Thonglor." },
-    { id: "h-sindhorn", n: "Sindhorn Midtown", sn: "Sindhorn", ll: [13.74153, 100.54279], list: 1, q: "Sindhorn Midtown Hotel Bangkok", d: "One of Bangkok's newest hotels, about 1 km from Lumphini Park. Guests love the pool and its city views." },
-    { id: "h-jasmine", n: "Jasmine Grande Residence", sn: "Jasmine Grande", ll: [13.7129, 100.5843], list: 1, q: "Jasmine Grande Residence Bangkok", d: "Family hotel with water slides on Rama IV, by Sukhumvit 42 and away from the centre. Free shuttle to BTS Phra Khanong. The pin is approximate." },
-    { id: "h-adlib", n: "Ad Lib", ll: [13.7453, 100.55224], list: 1, q: "Ad Lib Hotel Bangkok", d: "Rooftop pool in jungle-like greenery and Scandinavian-style rooms, near BTS Phloen Chit." },
-    { id: "h-novotel", n: "Novotel Sukhumvit 4", sn: "Novotel", ll: [13.7394, 100.55335], list: 1, q: "Novotel Bangkok Sukhumvit 4", d: "Fairly new, modern and good value, with big views from the 25th-floor pool." },
-    { id: "h-sivatel", n: "Sivatel", ll: [13.74471, 100.54808], list: 1, q: "Sivatel Bangkok Hotel", d: "Large rooms with city views, a spa and a panorama pool, on Wireless Road." },
-    { id: "h-banyan", n: "Banyan Tree", ll: [13.72359, 100.53979], list: 1, q: "Banyan Tree Bangkok", d: "Luxury in Sathorn, near Lumphini Park. The roof has the pool and Vertigo, the rooftop bar on your Sat 19 list." },
-    { id: "h-oakwood", n: "Oakwood Suites", sn: "Oakwood", ll: [13.72871, 100.56841], list: 1, q: "Oakwood Suites Bangkok", d: "Newish and very well reviewed, near BTS Phrom Phong. Every room has a kitchen." },
+    { id: "h-siamsiam", n: "Siam@Siam", ll: [13.74723, 100.52691], pick: 1, list: 1, q: "Siam@Siam Design Hotel Bangkok", pr: "€70–130", d: "Colourful, good-value design hotel by National Stadium BTS, with an 11th-floor infinity pool and a rooftop bar. Also one of our picks for the last two nights." },
+    { id: "h-137", n: "137 Pillars Suites", sn: "137 Pillars", ll: [13.7376, 100.57236], list: 1, q: "137 Pillars Suites Bangkok", pr: "€120–320", d: "Luxury suites off Sukhumvit 39, with two infinity pools: one on the 27th floor for every guest, and one on the roof for suite guests." },
+    { id: "h-muu", n: "MUU Bangkok", sn: "MUU", ll: [13.73069, 100.58168], list: 1, q: "MUU Bangkok Hotel", pr: "€85–170", d: "Stylish hotel in trendy Thong Lo, among cafés and shops. It used to be Akyra Thonglor." },
+    { id: "h-sindhorn", n: "Sindhorn Midtown", sn: "Sindhorn", ll: [13.74153, 100.54279], list: 1, q: "Sindhorn Midtown Hotel Bangkok", pr: "€120–170", d: "One of Bangkok's newest hotels, about 1 km from Lumphini Park. Guests love its 18th-floor infinity pool and city views." },
+    { id: "h-jasmine", n: "Jasmine Grande Residence", sn: "Jasmine Grande", ll: [13.7129, 100.5843], list: 1, q: "Jasmine Grande Residence Bangkok", pr: "€40–50", d: "Family hotel with water slides on Rama IV, by Sukhumvit 42 and away from the centre. Free shuttle to BTS Phra Khanong. The pin is approximate." },
+    { id: "h-adlib", n: "Ad Lib", ll: [13.7453, 100.55224], list: 1, q: "Ad Lib Hotel Bangkok", pr: "€90–135", d: "Rooftop pool in jungle-like greenery and Scandinavian-style rooms, near BTS Phloen Chit." },
+    { id: "h-novotel", n: "Novotel Sukhumvit 4", sn: "Novotel", ll: [13.7394, 100.55335], list: 1, q: "Novotel Bangkok Sukhumvit 4", pr: "€75–130", d: "Fairly new, modern and good value, with big views from the 25th-floor pool." },
+    { id: "h-sivatel", n: "Sivatel", ll: [13.74471, 100.54808], list: 1, q: "Sivatel Bangkok Hotel", pr: "€105–200", d: "Large rooms with city views, a spa and a panorama pool, on Wireless Road." },
+    { id: "h-banyan", n: "Banyan Tree", ll: [13.72359, 100.53979], list: 1, q: "Banyan Tree Bangkok", pr: "€160–300", d: "Luxury in Sathorn, near Lumphini Park. Vertigo, the rooftop bar on your Sat 19 list, is on its roof; the pool is on the 21st floor, and small." },
+    { id: "h-oakwood", n: "Oakwood Suites", sn: "Oakwood", ll: [13.72871, 100.56841], list: 1, q: "Oakwood Suites Bangkok", pr: "€110–185", d: "Newish and very well reviewed, near BTS Phrom Phong. Every room has a kitchen." },
   ];
   HOTELS.forEach((h) => PINS.push({ ...h, k: "hotel", s: "hotel", z: 99 }));
   // BTS and MRT stations near the hotels, and Lumphini Park's outline (simplified), from OpenStreetMap
@@ -1011,6 +1058,20 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     ["Si Lom", "MRT", 13.7292, 100.53707], ["Lumphini", "MRT", 13.72561, 100.54572], ["Khlong Toei", "MRT", 13.72213, 100.55437],
     ["Queen Sirikit Centre", "MRT", 13.72267, 100.55991], ["Sukhumvit", "MRT", 13.73747, 100.5615], ["Phetchaburi", "MRT", 13.74919, 100.56342],
     ["Sam Yan", "MRT", 13.73206, 100.53012], ["Hua Lamphong", "MRT", 13.73757, 100.51713], ["Wat Mangkon", "MRT", 13.74221, 100.50991],
+    ["Victory Monument", "BTS", 13.76276, 100.53705], ["Sanam Pao", "BTS", 13.77262, 100.54207], ["Ari", "BTS", 13.77971, 100.54462],
+    ["Saphan Khwai", "BTS", 13.79382, 100.54971], ["Mo Chit", "BTS", 13.8026, 100.55379], ["On Nut", "BTS", 13.70562, 100.601], ["Krung Thon Buri", "BTS", 13.72093, 100.50272],
+    ["Sanam Chai", "MRT", 13.74433, 100.49462], ["Sam Yot", "MRT", 13.747, 100.5023], ["Phra Ram 9", "MRT", 13.75786, 100.5653],
+    ["Thailand Cultural Centre", "MRT", 13.76616, 100.57012], ["Huai Khwang", "MRT", 13.77869, 100.57357], ["Sutthisan", "MRT", 13.78949, 100.57408],
+    ["Ratchadaphisek", "MRT", 13.799, 100.57456], ["Lat Phrao", "MRT", 13.8065, 100.57287], ["Phahon Yothin", "MRT", 13.81288, 100.56146],
+    ["Chatuchak Park", "MRT", 13.80296, 100.55328], ["Kamphaeng Phet", "MRT", 13.79795, 100.54788],
+  ];
+  // the lines, station by station, in their own colours (light, dark). Drawn straight between stations, so roughly schematic.
+  const TRANSIT = [
+    ["BTS Sukhumvit line", "#5FAE22", "#7CCB3C", ["Mo Chit", "Saphan Khwai", "Ari", "Sanam Pao", "Victory Monument", "Phaya Thai", "Ratchathewi", "Siam", "Chit Lom",
+      "Phloen Chit", "Nana", "Asok", "Phrom Phong", "Thong Lo", "Ekkamai", "Phra Khanong", "On Nut"]],
+    ["BTS Silom line", "#00845F", "#2FB287", ["National Stadium", "Siam", "Ratchadamri", "Sala Daeng", "Chong Nonsi", "Saint Louis", "Surasak", "Saphan Taksin", "Krung Thon Buri"]],
+    ["MRT Blue line", "#1F55B0", "#5C8FE6", ["Sanam Chai", "Sam Yot", "Wat Mangkon", "Hua Lamphong", "Sam Yan", "Si Lom", "Lumphini", "Khlong Toei", "Queen Sirikit Centre",
+      "Sukhumvit", "Phetchaburi", "Phra Ram 9", "Thailand Cultural Centre", "Huai Khwang", "Sutthisan", "Ratchadaphisek", "Lat Phrao", "Phahon Yothin", "Chatuchak Park", "Kamphaeng Phet"]],
   ];
   const PARK = [[13.73398, 100.54563], [13.73423, 100.53882], [13.73116, 100.53764], [13.7303, 100.53813], [13.72897, 100.53854], [13.7283, 100.54011],
     [13.72848, 100.54058], [13.72838, 100.54081], [13.72797, 100.54097], [13.72673, 100.54394], [13.72691, 100.5445]];
@@ -1373,6 +1434,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     const st = STATIONS.map(([n, l, a, b]) => ({ n, l, m: metres(p.ll, [a, b]) })).sort((x, y) => x.m - y.m)[0];
     const who = p.pick && p.list ? "On your list, and one of our picks" : p.pick ? "Our pick" : "From your list (Tailandieciai.lt)";
     return `<h5>${esc(p.n)}</h5><p>${esc(p.d)}</p><ul class="hd">
+      ${p.pr ? `<li>💶 About <b>${p.pr}</b> a night for the room</li>` : ""}
       <li>🚉 Nearest station: <b>${esc(st.n)} ${st.l}</b>, ${far(st.m)}</li>
       <li>🦎 Lumphini Park ${far(toPark(p.ll))}</li>
       <li>🏙️ SkyWalk ${far(metres(p.ll, PIN.skywalk.ll))} · 🛍️ MBK ${far(metres(p.ll, PIN.mbk.ll))}</li></ul>
@@ -1454,6 +1516,15 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     }
     if (t.dataset.read) { activate(t.dataset.read, { fly: false }); scrollToDay(t.dataset.read); return; }
     if (t.dataset.view) { showView(t.dataset.view); return; }
+    if (t.dataset.hotel) {   // a 📍 in the hotel table
+      const id = t.dataset.hotel;
+      showView("hotels");
+      quietUntil = performance.now() + 1600;
+      $("mapcol").scrollIntoView({ behavior: SMOOTH, block: "start" });
+      if (!WIDE.matches) { const b = $("backday"); b.hidden = false; b.dataset.day = "hotels"; b.textContent = "↓ Back to the hotel table"; }
+      setTimeout(() => { if (map && hotelMode) showPin(id); }, RM ? 0 : 950);
+      return;
+    }
     if (t.dataset.hotels) { showView("hotels"); quietUntil = performance.now() + 1400; $("mapcol").scrollIntoView({ behavior: SMOOTH, block: "start" }); return; }
     if (t.id === "backday") { t.hidden = true; scrollToDay(t.dataset.day); return; }
     if (t.matches("#pincard .x")) { hidePin(); return; }
@@ -1494,6 +1565,115 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     });
   }, { passive: true });
 
+  // A real street map under the pins: OpenFreeMap's free vector tiles, drawn by MapLibre GL and recoloured with this page's
+  // colours. It loads after the page. Until it has drawn (or if it can't: no WebGL, offline, blocked), the drawn coastlines stay.
+  const GL_LIBS = [
+    ["https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.6.0/maplibre-gl.js", "sha384-GfxBM9x46BaAFxtCq39Fxir8fNZ4VDnwgfi6Kzi5/F1tAFsm0amuuV8kd+Pxzuf/"],
+    ["https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.1.4/dist/leaflet-maplibre-gl.js", "sha384-tXYNKOHx4T02jMP7YYCtBxPIv1B5gaA5mcVPBzqMp6d7VzWzxJgI2aWF/nJLrQdS"],
+  ];
+  const addScript = ([src, sri]) => new Promise((ok, bad) => {
+    const s = document.createElement("script");
+    Object.assign(s, { src, integrity: sri, crossOrigin: "anonymous", onload: ok, onerror: bad });
+    document.head.appendChild(s);
+  });
+  const rgbOf = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const mixc = (a, b, t) => { const x = rgbOf(a), y = rgbOf(b); return "#" + x.map((v, i) => Math.round(v * t + y[i] * (1 - t)).toString(16).padStart(2, "0")).join(""); };
+  const NAME = ["coalesce", ["get", "name:en"], ["get", "name_en"], ["get", "name:latin"], ["get", "name"]];
+  function transitData() {
+    const at = Object.fromEntries(STATIONS.map(([n, , a, b]) => [n, [b, a]])), seen = new Set(), feats = [];
+    for (const [name, c, cd, stops] of TRANSIT) {
+      feats.push({ type: "Feature", properties: { name, c, cd }, geometry: { type: "LineString", coordinates: stops.map((n) => at[n]) } });
+      for (const n of stops) if (!seen.has(n)) { seen.add(n); feats.push({ type: "Feature", properties: { n, c, cd }, geometry: { type: "Point", coordinates: at[n] } }); }
+    }
+    return { type: "FeatureCollection", features: feats };
+  }
+  function streetPaint() {
+    const cs = getComputedStyle(document.documentElement), v = (n) => cs.getPropertyValue(n).trim();
+    const land = v("--land"), sea = v("--sea"), river = v("--river"), coast = v("--coast"), ink = v("--ink"), green = v("--lanta"), sun = v("--sun");
+    const dark = rgbOf(land).reduce((a, b) => a + b) < 384, line = ["get", dark ? "cd" : "c"];
+    const road = dark ? mixc(ink, land, 0.2) : mixc(coast, land, 0.6), major = dark ? mixc(ink, land, 0.36) : "#ffffff";
+    const casing = dark ? mixc(sea, land, 0.75) : mixc(coast, land, 0.95), motor = dark ? mixc(sun, land, 0.4) : mixc(sun, "#ffffff", 0.45);
+    const rail = mixc(ink, land, dark ? 0.45 : 0.4), parkc = mixc(green, land, dark ? 0.32 : 0.26), text = { "text-color": v("--muted"), "text-halo-color": land };
+    const P = {
+      background: { "background-color": land },
+      park: { "fill-color": parkc }, landcover_grass: { "fill-color": parkc },
+      landcover_wood: { "fill-color": mixc(green, land, dark ? 0.22 : 0.16) },
+      landuse_residential: { "fill-color": land },
+      water: { "fill-color": sea }, waterway: { "line-color": river },
+      building: { "fill-color": mixc(coast, land, dark ? 0.5 : 0.3), "fill-outline-color": mixc(coast, land, dark ? 0.8 : 0.5) },
+      "aeroway-area": { "fill-color": mixc(ink, land, 0.06) }, "aeroway-taxiway": { "line-color": road },
+      "aeroway-runway-casing": { "line-color": casing }, "aeroway-runway": { "line-color": major },
+      road_area_pier: { "fill-color": land }, road_pier: { "line-color": land },
+      highway_path: { "line-color": road }, highway_minor: { "line-color": road },
+      highway_major_casing: { "line-color": casing }, highway_major_inner: { "line-color": major }, highway_major_subtle: { "line-color": road },
+      highway_motorway_casing: { "line-color": casing }, highway_motorway_inner: { "line-color": motor }, highway_motorway_subtle: { "line-color": road },
+      tunnel_motorway_casing: { "line-color": casing }, tunnel_motorway_inner: { "line-color": mixc(motor, land, 0.5) },
+      highway_motorway_bridge_casing: { "line-color": casing }, highway_motorway_bridge_inner: { "line-color": motor },
+      railway: { "line-color": rail },
+      boundary_2: { "line-color": mixc(ink, land, 0.35) }, boundary_disputed: { "line-color": mixc(ink, land, 0.35) },
+      transit_lines: { "line-color": line }, transit_stops: { "circle-color": v("--surface"), "circle-stroke-color": line },
+      transit_names: { "text-color": v("--ink-2"), "text-halo-color": land },
+    };
+    for (const id of ["waterway_line_label", "highway-name-path", "highway-name-minor", "highway-name-major", "airport", "label_other", "label_village", "label_town"]) P[id] = { ...text };
+    for (const id of ["water_name_point_label", "water_name_line_label"]) P[id] = { ...text, "text-color": mixc(river, ink, 0.45) };
+    for (const id of ["label_city", "label_city_capital"]) P[id] = { ...text, "text-color": v("--ink-2") };
+    return P;
+  }
+  function tuneStyle(st) {
+    const drop = new Set(["highway-shield-non-us", "highway-shield-us-interstate", "road_shield_us", "label_country_1", "label_country_2", "label_country_3", "label_state",
+      "boundary_3", "landcover_ice_shelf", "landcover_glacier", "railway_transit", "railway_transit_dashline", "railway_service", "railway_service_dashline", "railway_dashline"]);
+    delete st.sources.ne2_shaded;
+    st.sources.transit = { type: "geojson", data: transitData() };
+    const out = [];
+    let lined = false;
+    for (const l of st.layers) {
+      if (drop.has(l.id)) continue;
+      if (l.layout && "text-field" in l.layout) l.layout["text-field"] = NAME;   // English or Latin names only
+      if (l.id === "highway-name-major") l.minzoom = 11.5;
+      if (["label_city", "label_city_capital", "label_town"].includes(l.id)) l.minzoom = 8;
+      // the BTS and MRT go above the roads, under the names
+      if (l.type === "symbol" && !lined) {
+        out.push({ id: "transit_lines", type: "line", source: "transit", filter: ["==", ["geometry-type"], "LineString"], minzoom: 9,
+          layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1.5, 12, 3, 15, 5], "line-opacity": 0.9 } });
+        lined = true;
+      }
+      out.push(l);
+      // city parks (Lumphini, Benjakitti) are in the landcover layer, which this style doesn't colour
+      if (l.id === "park") out.push({ id: "landcover_grass", type: "fill", source: "openmaptiles", "source-layer": "landcover", filter: ["==", ["get", "class"], "grass"], paint: {} });
+    }
+    out.push(
+      { id: "transit_stops", type: "circle", source: "transit", filter: ["==", ["geometry-type"], "Point"], minzoom: 10.5,
+        paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 2.6, 15, 5.5], "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 11, 1.5, 15, 2.5] } },
+      { id: "transit_names", type: "symbol", source: "transit", filter: ["==", ["geometry-type"], "Point"], minzoom: 11.75,
+        layout: { "text-field": ["get", "n"], "text-font": ["Noto Sans Regular"], "text-size": 11.5, "text-anchor": "top", "text-offset": [0, 0.55], "text-max-width": 7 },
+        paint: { "text-halo-width": 1.6 } },
+    );
+    st.layers = out;
+    const P = streetPaint();
+    for (const l of st.layers) if (P[l.id]) l.paint = { ...(l.paint || {}), ...P[l.id] };
+    return st;
+  }
+  async function loadStreets() {
+    try {
+      const c = document.createElement("canvas");
+      if (!(c.getContext("webgl2") || c.getContext("webgl"))) return;
+      for (const lib of GL_LIBS) await addScript(lib);
+      const r = await fetch("https://tiles.openfreemap.org/styles/positron");
+      if (!r.ok || !L.maplibreGL) return;
+      const gl = L.maplibreGL({ style: tuneStyle(await r.json()) }).addTo(map).getMaplibreMap();
+      // show it once real map tiles have drawn, then hide the drawn coastlines
+      let got = false;
+      gl.on("sourcedata", (e) => { if (e.tile && e.sourceId === "openmaptiles") got = true; });
+      gl.on("idle", () => { if (got) $("mapcol").classList.add("streets"); });
+      const retint = () => {
+        if (!gl.isStyleLoaded()) return;
+        for (const [id, props] of Object.entries(streetPaint())) if (gl.getLayer(id)) for (const [k, val] of Object.entries(props)) gl.setPaintProperty(id, k, val);
+      };
+      matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retint);
+      new MutationObserver(retint).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    } catch (e) { /* keep the drawn coastlines */ }
+  }
+
   renderHero();
   renderDays();
   initMap();
@@ -1502,6 +1682,7 @@ table.fees { width: 100%; border-collapse: collapse; font-size: 15px; }
     styleLines();
     if (TODAY) { activate(TODAY.id, { fly: false }); flyDay(TODAY, true); }
     layout();
+    loadStreets();
   }
 })();
 </script>
